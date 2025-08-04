@@ -1,13 +1,12 @@
-import React from 'react';
-import Procesos from './Componentes/Procesos';
+import React from "react"
+import OrganizadorArchivos from "./Componentes/organizador-archivos"
 
 function App() {
   return (
     <div>
-      <h1>Gestión de Procesos</h1>
-      <Procesos />
+      <OrganizadorArchivos />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
