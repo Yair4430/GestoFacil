@@ -4,11 +4,13 @@ import EntradaPDF from "./entrada-pdf"
 import IntermedioExcel from "./intermedio-excel"
 import SalidaPDF from "./salida-pdf"
 import ModalAyuda from "./modal-ayuda"
+import ResultadoElegante from "./resultado-elegante"
 
 export default function OrganizadorArchivos() {
-  const [mensaje, setMensaje] = useState("")
+  const [resultado, setResultado] = useState(null)
   const [isError, setIsError] = useState(false)
   const [showModal, setShowModal] = useState(false)
+  const [showResultado, setShowResultado] = useState(false)  // ← ESTA LÍNEA ES CLAVE
 
   const handleSubmit = async (data, endpoint) => {
     try {
@@ -16,12 +18,20 @@ export default function OrganizadorArchivos() {
       Object.entries(data).forEach(([key, value]) => formData.append(key, value))
 
       const res = await axios.post(`http://localhost:8000/${endpoint}`, formData)
-      setMensaje(res.data.message)
+      setResultado(res.data)
       setIsError(false)
+      setShowResultado(true)  // ← MOSTRAR EL MODAL DE RESULTADO
     } catch (error) {
-      setMensaje(error.response?.data?.error || "Ocurrió un error inesperado")
+      setResultado(error.response?.data?.error || "Ocurrió un error inesperado")
       setIsError(true)
+      setShowResultado(true)  // ← MOSTRAR EL MODAL DE ERROR
     }
+  }
+
+  const cerrarResultado = () => {
+    setShowResultado(false)
+    setResultado(null)
+    setIsError(false)
   }
 
   const containerStyle = {
@@ -78,55 +88,40 @@ export default function OrganizadorArchivos() {
     gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
   }
 
-  const alertStyle = {
-    padding: '16px',
-    borderRadius: '8px',
-    border: isError ? '1px solid #fecaca' : '1px solid #bbf7d0',
-    backgroundColor: isError ? '#fef2f2' : '#f0fdf4',
-    color: isError ? '#991b1b' : '#166534'
-  }
-
-  const alertContentStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
-  }
-
   return (
-    <div style={containerStyle}>
-      <div style={mainStyle}>
-        <div style={headerStyle}>
-          <button 
-            style={helpButtonStyle}
-            onClick={() => setShowModal(true)}
-            title="Ayuda"
-          >
-            ?
-          </button>
-          <h1 style={titleStyle}>GestionFacil</h1>
-          <p style={subtitleStyle}>Programa para la organización de juicios de evaluación mediante va a avanzando el proceso de certificación en complementaria (Forma masiva)</p>
-        </div>
-
-        <div style={gridStyle}>
-          <EntradaPDF onSubmit={handleSubmit} />
-          <IntermedioExcel onSubmit={handleSubmit} />
-          <SalidaPDF onSubmit={handleSubmit} />
-        </div>
-
-        {mensaje && (
-          <div style={alertStyle}>
-            <div style={alertContentStyle}>
-              <span>{isError ? "❌" : "✅"}</span>
-              <span>{mensaje}</span>
-            </div>
+      <div style={containerStyle}>
+        <div style={mainStyle}>
+          <div style={headerStyle}>
+            <button 
+              style={helpButtonStyle}
+              onClick={() => setShowModal(true)}
+              title="Ayuda"
+            >
+              ?
+            </button>
+            <h1 style={titleStyle}>GestionFacil</h1>
+            <p style={subtitleStyle}>Programa para la organización de juicios de evaluación mediante va a avanzando el proceso de certificación en complementaria (Forma masiva)</p>
           </div>
+
+          <div style={gridStyle}>
+            <EntradaPDF onSubmit={handleSubmit} />
+            <IntermedioExcel onSubmit={handleSubmit} />
+            <SalidaPDF onSubmit={handleSubmit} />
+          </div>
+        </div>
+
+        <ModalAyuda 
+          isOpen={showModal} 
+          onClose={() => setShowModal(false)} 
+        />
+
+        {showResultado && (  // ← CONDICIÓN PARA MOSTRAR EL MODAL
+          <ResultadoElegante
+            resultado={resultado}
+            isError={isError}
+            onClose={cerrarResultado}  // ← FUNCIÓN PARA CERRAR
+          />
         )}
       </div>
-
-      <ModalAyuda 
-        isOpen={showModal} 
-        onClose={() => setShowModal(false)} 
-      />
-    </div>
-  )
-}
+    )
+  }
