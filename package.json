@@ -2,9 +2,9 @@
   "name": "gestofacil-root",
   "version": "1.0.0",
   "scripts": {
-    "frontend": "npm run dev --prefix FRONTEND",
-    "backend": "python BACKEND/Main.py",
-    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
+  "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+  "frontend": "npm run dev --prefix FRONTEND",
+  "backend": "cd BACKEND && python Main.py"
   },
   "devDependencies": {
     "concurrently": "^8.2.0"

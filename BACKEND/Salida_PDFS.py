@@ -25,6 +25,18 @@ if not os.path.isdir(ruta_raiz):
     print(json.dumps(resultado, ensure_ascii=False, indent=2))
     exit(1)
 
+# Función para extraer número de ficha del nombre de carpeta
+def extraer_numero_ficha(nombre_carpeta):
+    """
+    Extrae el número de ficha del nombre de la carpeta.
+    Funciona con formatos como: "12345", "12345_SJDS", "12345_ABC", etc.
+    """
+    # Buscar secuencia de dígitos al inicio del nombre
+    match = re.match(r'^(\d+)', nombre_carpeta)
+    if match:
+        return match.group(1)
+    return None
+
 # Contadores y listas
 total = 0
 renombrados = 0
@@ -40,14 +52,16 @@ for carpeta, _, archivos in os.walk(ruta_raiz):
             total += 1
             ruta_archivo = os.path.join(carpeta, archivo)
             
-            # Obtener nombre de carpeta (ficha)
-            ficha = os.path.basename(carpeta)
+            # Obtener nombre de carpeta
+            nombre_carpeta = os.path.basename(carpeta)
             
-            # Verifica que ficha sea un número
-            if not ficha.isdigit():
+            ficha = extraer_numero_ficha(nombre_carpeta)
+            
+            # Verifica que se pudo extraer un número de ficha válido
+            if not ficha:
                 errores.append({
                     "archivo": archivo,
-                    "error": f"Está en carpeta no válida: {ficha}"
+                    "error": f"No se pudo extraer número de ficha de la carpeta: {nombre_carpeta}"
                 })
                 continue
             
@@ -85,6 +99,7 @@ for carpeta, _, archivos in os.walk(ruta_raiz):
                     "nombre_original": archivo,
                     "nombre_final": nombre_final,
                     "ficha": ficha,
+                    "carpeta_original": nombre_carpeta,  # Agregado para debugging
                     "tipo": tipo_proceso,
                     "fue_renumerado": contador > 1
                 })
