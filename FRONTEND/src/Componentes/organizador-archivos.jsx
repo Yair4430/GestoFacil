@@ -2,6 +2,7 @@ import { useState } from "react"
 import axios from "axios"
 import EntradaPDF from "./entrada-pdf"
 import IntermedioExcel from "./intermedio-excel"
+import IntermedioPDF from "./intermedio-pdf" // ← NUEVO IMPORT
 import SalidaPDF from "./salida-pdf"
 import ModalAyuda from "./modal-ayuda"
 import ResultadoElegante from "./resultado-elegante"
@@ -10,7 +11,7 @@ export default function OrganizadorArchivos() {
   const [resultado, setResultado] = useState(null)
   const [isError, setIsError] = useState(false)
   const [showModal, setShowModal] = useState(false)
-  const [showResultado, setShowResultado] = useState(false)  // ← ESTA LÍNEA ES CLAVE
+  const [showResultado, setShowResultado] = useState(false)
 
   const handleSubmit = async (data, endpoint) => {
     try {
@@ -20,11 +21,11 @@ export default function OrganizadorArchivos() {
       const res = await axios.post(`http://localhost:8000/${endpoint}`, formData)
       setResultado(res.data)
       setIsError(false)
-      setShowResultado(true)  // ← MOSTRAR EL MODAL DE RESULTADO
+      setShowResultado(true)
     } catch (error) {
       setResultado(error.response?.data?.error || "Ocurrió un error inesperado")
       setIsError(true)
-      setShowResultado(true)  // ← MOSTRAR EL MODAL DE ERROR
+      setShowResultado(true)
     }
   }
 
@@ -89,39 +90,40 @@ export default function OrganizadorArchivos() {
   }
 
   return (
-      <div style={containerStyle}>
-        <div style={mainStyle}>
-          <div style={headerStyle}>
-            <button 
-              style={helpButtonStyle}
-              onClick={() => setShowModal(true)}
-              title="Ayuda"
-            >
-              ?
-            </button>
-            <h1 style={titleStyle}>GestionFacil</h1>
-            <p style={subtitleStyle}>Programa para la organización de juicios de evaluación mediante va a avanzando el proceso de certificación en complementaria (Forma masiva)</p>
-          </div>
-
-          <div style={gridStyle}>
-            <EntradaPDF onSubmit={handleSubmit} />
-            <IntermedioExcel onSubmit={handleSubmit} />
-            <SalidaPDF onSubmit={handleSubmit} />
-          </div>
+    <div style={containerStyle}>
+      <div style={mainStyle}>
+        <div style={headerStyle}>
+          <button 
+            style={helpButtonStyle}
+            onClick={() => setShowModal(true)}
+            title="Ayuda"
+          >
+            ?
+          </button>
+          <h1 style={titleStyle}>GestionFacil</h1>
+          <p style={subtitleStyle}>Programa para la organización de juicios de evaluación mediante va a avanzando el proceso de certificación en complementaria (Forma masiva)</p>
         </div>
 
-        <ModalAyuda 
-          isOpen={showModal} 
-          onClose={() => setShowModal(false)} 
-        />
-
-        {showResultado && (  // ← CONDICIÓN PARA MOSTRAR EL MODAL
-          <ResultadoElegante
-            resultado={resultado}
-            isError={isError}
-            onClose={cerrarResultado}  // ← FUNCIÓN PARA CERRAR
-          />
-        )}
+        <div style={gridStyle}>
+          <EntradaPDF onSubmit={handleSubmit} />
+          <IntermedioExcel onSubmit={handleSubmit} />
+          <IntermedioPDF onSubmit={handleSubmit} /> {/* ← NUEVO COMPONENTE */}
+          <SalidaPDF onSubmit={handleSubmit} />
+        </div>
       </div>
-    )
-  }
+
+      <ModalAyuda 
+        isOpen={showModal} 
+        onClose={() => setShowModal(false)} 
+      />
+
+      {showResultado && (
+        <ResultadoElegante
+          resultado={resultado}
+          isError={isError}
+          onClose={cerrarResultado}
+        />
+      )}
+    </div>
+  )
+}

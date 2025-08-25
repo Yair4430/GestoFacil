@@ -105,7 +105,7 @@ export default function ModalAyuda({ isOpen, onClose }) {
 
         <div style={sectionStyle}>
           <h3 style={{...sectionTitleStyle, color: '#059669'}}>
-            📊 Proceso Intermedio
+            📊 Proceso Intermedio (Excel)
           </h3>
           <p style={sectionContentStyle}>
             Después de generar todos los archivos Excel con los datos, estos se guardan en una carpeta específica. 
@@ -115,6 +115,30 @@ export default function ModalAyuda({ isOpen, onClose }) {
           <div style={{marginTop: '12px', padding: '8px', backgroundColor: '#f0fdf4', borderRadius: '4px'}}>
             <strong>Función:</strong> Toma los archivos Excel generados y los organiza automáticamente en las carpetas 
             de fichas correspondientes, manteniendo la estructura organizacional.
+          </div>
+        </div>
+
+        <div style={sectionStyle}>
+          <h3 style={{...sectionTitleStyle, color: '#dc2626'}}> {/* Color rojo */}
+            🔄 Proceso Intermedio (PDFs)
+          </h3>
+          <p style={sectionContentStyle}>
+            Este proceso une todos los archivos PDF dentro de cada carpeta de ficha en un único archivo PDF. 
+            El sistema identifica automáticamente el PDF principal (con formato de instructor) y lo coloca primero, 
+            seguido de los demás documentos en orden alfabético.
+          </p>
+          <p style={sectionContentStyle}>
+            <strong>Características especiales:</strong>
+          </p>
+          <ul style={{margin: '8px 0', paddingLeft: '20px', color: '#4b5563'}}>
+            <li>📋 <strong>PDF principal primero:</strong> El archivo con formato "NÚMERO NOMBRE INSTRUCTOR" va al inicio</li>
+            <li>🆔 <strong>Procesamiento inteligente:</strong> Detecta y procesa certificados de cédula automáticamente</li>
+            <li>🗑️ <strong>Limpieza automática:</strong> Elimina páginas en blanco de certificados de cédula</li>
+            <li>🧹 <strong>Organización:</strong> Mantiene solo el archivo unido final, eliminando los originales</li>
+          </ul>
+          <div style={{marginTop: '12px', padding: '8px', backgroundColor: '#fef2f2', borderRadius: '4px'}}>
+            <strong>Formato requerido:</strong> El PDF principal debe tener el formato "3283019 LAURA DANIELA TOQUICA LA ROTTA.pdf" 
+            (número de 6+ dígitos + espacio + nombre completo en mayúsculas)
           </div>
         </div>
 
@@ -145,7 +169,7 @@ export default function ModalAyuda({ isOpen, onClose }) {
           textAlign: 'center'
         }}>
           <p style={{margin: 0, color: '#6b7280', fontSize: '0.9rem'}}>
-            💡 <strong>Tip:</strong> Ejecuta los procesos en orden: Entrada → Intermedio → Final para obtener los mejores resultados.
+            💡 <strong>Tip:</strong> Ejecuta los procesos en orden: Entrada → Intermedio Excel → Intermedio PDFs → Final para obtener los mejores resultados.
           </p>
         </div>
       </div>

@@ -173,17 +173,98 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
       )
     }
 
-    // --- INTERMEDIO ---
+    // --- INTERMEDIO EXCEL ---
     if (resultado.archivos_omitidos !== undefined) {
       return (
         <div style={overlayStyle} onClick={onClose}>
           <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
             <div style={headerStyle}>
-              <h3 style={{color: '#059669', margin: 0}}>✅ Intermedio Completado</h3>
+              <h3 style={{color: '#059669', margin: 0}}>✅ Intermedio Excel Completado</h3>
               <button style={closeButtonStyle} onClick={onClose}>✕</button>
             </div>
 
-            {/* ... igual que tu código actual pero siempre usando propiedades como archivo.nombre_archivo y archivo.razon */}
+            {/* ... código existente para intermedio Excel ... */}
+          </div>
+        </div>
+      )
+    }
+
+    // --- INTERMEDIO PDFs ---
+    if (resultado.carpetas_procesadas !== undefined) {
+      return (
+        <div style={overlayStyle} onClick={onClose}>
+          <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
+            <div style={headerStyle}>
+              <h3 style={{color: '#dc2626', margin: 0}}>✅ Intermedio PDFs Completado</h3>
+              <button style={closeButtonStyle} onClick={onClose}>✕</button>
+            </div>
+
+            {/* Estadísticas principales */}
+            <div style={statsStyle}>
+              <div style={statCardStyle}>
+                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#dc2626'}}>
+                  {resultado.carpetas_procesadas}
+                </div>
+                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Carpetas Procesadas</div>
+              </div>
+              <div style={statCardStyle}>
+                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#059669'}}>
+                  {resultado.carpetas_procesadas - (resultado.carpetas_con_errores || 0)}
+                </div>
+                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Carpetas Exitosas</div>
+              </div>
+              <div style={statCardStyle}>
+                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#ef4444'}}>
+                  {resultado.carpetas_con_errores || 0}
+                </div>
+                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Carpetas con Errores</div>
+              </div>
+            </div>
+
+            {/* Resultados detallados por carpeta */}
+            {resultado.resultados_detallados && resultado.resultados_detallados.length > 0 && (
+              <div style={{marginBottom: '16px'}}>
+                <h4 style={{color: '#dc2626', marginBottom: '8px'}}>📊 Resultados por Carpeta:</h4>
+                <div style={listStyle}>
+                  {resultado.resultados_detallados.map((carpeta, index) => (
+                    <div key={index} style={itemStyle}>
+                      <strong style={{color: carpeta.errores.length > 0 ? '#ef4444' : '#059669'}}>
+                        {carpeta.carpeta}
+                      </strong>
+                      <br />
+                      <span style={{color: '#6b7280', fontSize: '0.8rem'}}>
+                        📄 {carpeta.archivos_procesados} archivos | 
+                        📖 {carpeta.total_paginas} páginas |
+                        {carpeta.errores.length > 0 ? (
+                          <span style={{color: '#ef4444'}}> ❌ {carpeta.errores.length} error(es)</span>
+                        ) : (
+                          <span style={{color: '#059669'}}> ✅ Éxito</span>
+                        )}
+                      </span>
+                      {carpeta.archivo_final && (
+                        <div style={{fontSize: '0.75rem', color: '#3b82f6', marginTop: '4px'}}>
+                          📁 {carpeta.archivo_final.split('/').pop() || carpeta.archivo_final}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Errores generales */}
+            {resultado.errores && resultado.errores.length > 0 && (
+              <div>
+                <h4 style={{color: '#ef4444', marginBottom: '8px'}}>❌ Errores Generales:</h4>
+                <div style={listStyle}>
+                  {resultado.errores.map((error, index) => (
+                    <div key={index} style={itemStyle}>
+                      {typeof error === "string" ? error : JSON.stringify(error)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )
@@ -199,25 +280,7 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
               <button style={closeButtonStyle} onClick={onClose}>✕</button>
             </div>
 
-            {/* ... igual que tu código actual, pero en resultado.errores usarías: */}
-            {resultado.errores.length > 0 && (
-              <div>
-                <h4 style={{color: '#dc2626', marginBottom: '8px'}}>❌ Errores:</h4>
-                <div style={listStyle}>
-                  {resultado.errores.map((error, index) => (
-                    <div key={index} style={itemStyle}>
-                      <strong>{error.archivo || "Archivo desconocido"}</strong>
-                      <br />
-                      <span style={{color: '#dc2626', fontSize: '0.8rem'}}>
-                        {typeof error.error === "string"
-                          ? error.error
-                          : JSON.stringify(error.error)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* ... código existente para salida ... */}
           </div>
         </div>
       )
