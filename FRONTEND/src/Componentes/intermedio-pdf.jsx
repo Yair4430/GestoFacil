@@ -1,118 +1,173 @@
-import { useState } from "react"
+import { useState } from "react";
 
 export default function IntermedioPDF({ onSubmit }) {
-  const [ruta, setRuta] = useState("")
+  const [ruta, setRuta] = useState("");
+  const [resultado, setResultado] = useState(null);
 
-  const cardStyle = {
-    backgroundColor: '#fff5f5',
-    padding: '24px',
-    borderRadius: '8px',
-    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-    border: '1px solid #fed7d7'
-  }
-
-  const headerStyle = {
-    marginBottom: '16px'
-  }
-
-  const titleStyle = {
-    fontSize: '1.125rem',
-    fontWeight: '600',
-    color: '#dc2626',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
-  }
-
-  const contentStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px'
-  }
-
-  const labelStyle = {
-    display: 'block',
-    fontSize: '0.875rem',
-    fontWeight: '500',
-    color: '#7f1d1d',
-    marginBottom: '4px'
-  }
-
-  const inputStyle = {
-    width: '100%',
-    maxWidth: '280px',
-    margin: '0 auto',
-    padding: '8px 12px',
-    border: '1px solid #fecaca',
-    borderRadius: '6px',
-    fontSize: '14px',
-    outline: 'none',
-    transition: 'border-color 0.2s',
-    textAlign: 'center',
-    backgroundColor: '#fef2f2'
-  }
-
-  const buttonContainerStyle = {
-    display: 'flex',
-    justifyContent: 'center'
-  }
-
-  const buttonStyle = {
-    width: '180px',
-    marginLeft: '60px',
-    marginRight: 'auto',
-    backgroundColor: '#dc2626',
-    color: 'white',
-    padding: '8px 16px',
-    borderRadius: '6px',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s',
-    fontWeight: '500'
-  }
+  const handleSubmit = async () => {
+    try {
+      const response = await onSubmit({ ruta }, "intermedio-pdfs");
+      setResultado(response);
+      setRuta("");
+    } catch (error) {
+      console.error("Error:", error);
+      setResultado({
+        success: false,
+        error: "Error al ejecutar el proceso",
+      });
+    }
+  };
 
   return (
-    <div style={cardStyle}>
-      <div style={headerStyle}>
-        <h3 style={titleStyle}>
-          🔄 Proceso Intermedio de PDFS
-        </h3>
-      </div>
-      <div style={contentStyle}>
-        <div>
-          <label style={labelStyle}>
-            Ruta de la carpeta con los PDFs a unir:
-          </label>
-          <input
-            type="text"
-            value={ruta}
-            onChange={(e) => setRuta(e.target.value.replace(/\\/g, "/"))}
-            placeholder="C:/ruta/a/carpeta/pdfs"
-            style={inputStyle}
-            onFocus={(e) => {
-              e.target.style.borderColor = '#dc2626';
-              e.target.style.backgroundColor = '#fee2e2';
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = '#fecaca';
-              e.target.style.backgroundColor = '#fef2f2';
-            }}
-          />
+    <>
+      <div className="card">
+        <div className="card-header">
+          <h3 className="card-title-red">🔄 Proceso Intermedio de PDFs</h3>
         </div>
-        <div style={buttonContainerStyle}>
-          <button
-            onClick={() => {
-              onSubmit({ ruta }, "intermedio-pdfs");
-              setRuta("");
-            }}
-            style={buttonStyle}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#b91c1c'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#dc2626'}
-          >
-            Ejecutar Intermedio
-          </button>
+        <div className="card-content">
+          <div>
+            <label className="input-label">
+              Ruta de la carpeta con los PDFs a unir:
+            </label>
+            <input
+              type="text"
+              value={ruta}
+              onChange={(e) => setRuta(e.target.value.replace(/\\/g, "/"))}
+              placeholder="C:/ruta/a/carpeta/pdfs"
+              className="input-text"
+            />
+          </div>
+          <div className="button-container">
+            <button className="btn-danger" onClick={handleSubmit}>
+              ⚡ Ejecutar Intermedio
+            </button>
+          </div>
+
+          {resultado && (
+            <div className="resultado">
+              <h4 className={resultado.success ? "success-text" : "error-text"}>
+                {resultado.success
+                  ? "✅ Proceso completado"
+                  : "❌ Error en el proceso"}
+              </h4>
+
+              {resultado.mensaje && <p>{resultado.mensaje}</p>}
+              {resultado.error && (
+                <p className="error-text">{resultado.error}</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
-    </div>
-  )
+
+      {/* 🎨 Estilos CSS */}
+      <style>{`
+        .card {
+          background: linear-gradient(145deg, #ffffff, #f9fafb);
+          padding: 28px;
+          border-radius: 16px;
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+          border: 1px solid #e5e7eb;
+          max-width: 600px;
+          margin: 30px auto;
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+          margin-bottom: 18px;
+          text-align: center;
+        }
+
+        .card-title-red {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: #dc2626;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .card-content {
+          display: flex;
+          flex-direction: column;
+          gap: 22px;
+        }
+
+        .input-label {
+          display: block;
+          font-size: 0.95rem;
+          font-weight: 600;
+          color: #374151;
+          margin-bottom: 8px;
+          text-align: center;
+        }
+
+        .input-text {
+          width: 100%;
+          max-width: 380px;
+          margin: 0 auto;
+          padding: 12px 16px;
+          border: 2px solid #e5e7eb;
+          border-radius: 10px;
+          font-size: 15px;
+          outline: none;
+          text-align: center;
+          transition: all 0.3s ease;
+        }
+
+        .input-text:focus {
+          border-color: #dc2626;
+          box-shadow: 0 0 6px rgba(220, 38, 38, 0.4);
+        }
+
+        .button-container {
+          display: flex;
+          justify-content: center;
+        }
+
+        .btn-danger {
+          width: 240px;
+          background: linear-gradient(135deg, #dc2626, #b91c1c);
+          color: white;
+          padding: 12px 18px;
+          border-radius: 10px;
+          border: none;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 1rem;
+          transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn-danger:hover {
+          background: linear-gradient(135deg, #b91c1c, #991b1b);
+          transform: scale(1.07);
+        }
+
+        .resultado {
+          margin-top: 25px;
+          padding: 18px;
+          border: 1px solid #e5e7eb;
+          border-radius: 12px;
+          background: #f9fafb;
+        }
+
+        .success-text {
+          color: #059669;
+          margin-bottom: 15px;
+          font-weight: bold;
+        }
+
+        .error-text {
+          color: #dc2626;
+          font-weight: bold;
+        }
+      `}</style>
+    </>
+  );
 }

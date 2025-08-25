@@ -4,172 +4,173 @@ export default function ModalAyuda({ isOpen, onClose }) {
   if (!isOpen) return null
 
   const overlayStyle = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000
+    position: "fixed",
+    inset: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.55)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+    backdropFilter: "blur(3px)"
   }
 
   const modalStyle = {
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    padding: '32px',
-    maxWidth: '800px',
-    maxHeight: '80vh',
-    overflow: 'auto',
-    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-    position: 'relative'
+    backgroundColor: "white",
+    borderRadius: "16px",
+    padding: "32px",
+    maxWidth: "850px",
+    maxHeight: "85vh",
+    overflowY: "auto",
+    boxShadow: "0 25px 40px rgba(0,0,0,0.15)",
+    position: "relative",
+    animation: "fadeIn 0.3s ease-in-out"
   }
 
   const headerStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '24px',
-    borderBottom: '2px solid #f3f4f6',
-    paddingBottom: '16px'
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "28px",
+    borderBottom: "2px solid #f3f4f6",
+    paddingBottom: "16px"
   }
 
   const titleStyle = {
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    color: '#1f2937'
+    fontSize: "1.7rem",
+    fontWeight: "bold",
+    color: "#111827",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px"
   }
 
   const closeButtonStyle = {
-    backgroundColor: '#ef4444',
-    color: 'white',
-    border: 'none',
-    borderRadius: '50%',
-    width: '32px',
-    height: '32px',
-    cursor: 'pointer',
-    fontSize: '18px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: "#ef4444",
+    color: "white",
+    border: "none",
+    borderRadius: "50%",
+    width: "36px",
+    height: "36px",
+    cursor: "pointer",
+    fontSize: "18px",
+    fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "background 0.2s"
   }
 
   const sectionStyle = {
-    marginBottom: '24px',
-    padding: '20px',
-    borderRadius: '8px',
-    border: '1px solid #e5e7eb'
+    marginBottom: "28px",
+    padding: "22px",
+    borderRadius: "10px",
+    border: "1px solid #e5e7eb",
+    backgroundColor: "#f9fafb",
+    transition: "all 0.2s"
   }
 
   const sectionTitleStyle = {
-    fontSize: '1.25rem',
-    fontWeight: '600',
-    marginBottom: '12px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px'
+    fontSize: "1.25rem",
+    fontWeight: "600",
+    marginBottom: "14px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px"
   }
 
   const sectionContentStyle = {
-    fontSize: '0.95rem',
-    lineHeight: '1.6',
-    color: '#4b5563'
+    fontSize: "0.95rem",
+    lineHeight: "1.65",
+    color: "#374151"
   }
+
+  const highlightBox = (bgColor) => ({
+    marginTop: "14px",
+    padding: "10px 12px",
+    backgroundColor: bgColor,
+    borderRadius: "6px",
+    fontSize: "0.9rem"
+  })
 
   return (
     <div style={overlayStyle} onClick={onClose}>
       <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
+        {/* HEADER */}
         <div style={headerStyle}>
-          <h2 style={titleStyle}>📋 Guía del Organizador de Archivos</h2>
-          <button style={closeButtonStyle} onClick={onClose}>
-            ✕
-          </button>
+          <h2 style={titleStyle}>📘 Guía del Organizador</h2>
+          <button style={closeButtonStyle} onClick={onClose}>✕</button>
         </div>
 
+        {/* ENTRADA */}
         <div style={sectionStyle}>
-          <h3 style={{...sectionTitleStyle, color: '#2563eb'}}>
-            📄 Proceso de Entrada
-          </h3>
+          <h3 style={{ ...sectionTitleStyle, color: "#2563eb" }}>📄 Proceso de Entrada</h3>
           <p style={sectionContentStyle}>
-            En este proceso, se crean carpetas basadas en el número de ficha, que corresponde al nombre del PDF. 
-            Todos los juicios generados se almacenan dentro de la carpeta que tiene el mismo número de ficha, 
-            facilitando la organización y el acceso a los documentos relacionados.
+            Se crean carpetas basadas en el número de ficha (nombre del PDF). 
+            Los documentos relacionados se almacenan en esa carpeta, facilitando la organización.
           </p>
-          <div style={{marginTop: '12px', padding: '8px', backgroundColor: '#eff6ff', borderRadius: '4px'}}>
-            <strong>Ejemplo:</strong> Si tienes un PDF llamado "12345_Juan_Perez.pdf", se creará una carpeta "12345" 
-            donde se almacenarán todos los documentos relacionados.
+          <div style={highlightBox("#eff6ff")}>
+            <strong>Ejemplo:</strong> <br />
+            "12345 JUAN DAVID PEREZ GONZALEZ.pdf" → Carpeta <strong>12345</strong> con todos los documentos.
           </div>
         </div>
 
+        {/* INTERMEDIO EXCEL */}
         <div style={sectionStyle}>
-          <h3 style={{...sectionTitleStyle, color: '#059669'}}>
-            📊 Proceso Intermedio (Excel)
-          </h3>
+          <h3 style={{ ...sectionTitleStyle, color: "#059669" }}>📊 Proceso Intermedio (Excel)</h3>
           <p style={sectionContentStyle}>
-            Después de generar todos los archivos Excel con los datos, estos se guardan en una carpeta específica. 
-            Posteriormente, los Excel se distribuyen en subcarpetas de fichas, asegurando que cada archivo se almacene 
-            en la carpeta correspondiente al número de ficha, lo que optimiza la gestión de la información.
+            Los Excel generados se guardan en una carpeta y luego se distribuyen automáticamente 
+            en las carpetas correspondientes al número de ficha.
           </p>
-          <div style={{marginTop: '12px', padding: '8px', backgroundColor: '#f0fdf4', borderRadius: '4px'}}>
-            <strong>Función:</strong> Toma los archivos Excel generados y los organiza automáticamente en las carpetas 
-            de fichas correspondientes, manteniendo la estructura organizacional.
+          <div style={highlightBox("#f0fdf4")}>
+            <strong>Función:</strong> Organiza automáticamente los Excel en sus carpetas de ficha.
           </div>
         </div>
 
+        {/* INTERMEDIO PDFs */}
         <div style={sectionStyle}>
-          <h3 style={{...sectionTitleStyle, color: '#dc2626'}}> {/* Color rojo */}
-            🔄 Proceso Intermedio (PDFs)
-          </h3>
+          <h3 style={{ ...sectionTitleStyle, color: "#dc2626" }}>🔄 Proceso Intermedio (PDFs)</h3>
           <p style={sectionContentStyle}>
-            Este proceso une todos los archivos PDF dentro de cada carpeta de ficha en un único archivo PDF. 
-            El sistema identifica automáticamente el PDF principal (con formato de instructor) y lo coloca primero, 
-            seguido de los demás documentos en orden alfabético.
+            Une todos los PDFs de cada carpeta en uno solo. El archivo principal (instructor) va primero, 
+            seguido de los demás en orden alfabético.
           </p>
-          <p style={sectionContentStyle}>
-            <strong>Características especiales:</strong>
-          </p>
-          <ul style={{margin: '8px 0', paddingLeft: '20px', color: '#4b5563'}}>
-            <li>📋 <strong>PDF principal primero:</strong> El archivo con formato "NÚMERO NOMBRE INSTRUCTOR" va al inicio</li>
-            <li>🆔 <strong>Procesamiento inteligente:</strong> Detecta y procesa certificados de cédula automáticamente</li>
-            <li>🗑️ <strong>Limpieza automática:</strong> Elimina páginas en blanco de certificados de cédula</li>
-            <li>🧹 <strong>Organización:</strong> Mantiene solo el archivo unido final, eliminando los originales</li>
+          <ul style={{ margin: "10px 0", paddingLeft: "22px", color: "#374151", fontSize: "0.9rem" }}>
+            <li>📋 <strong>Principal primero:</strong> "NÚMERO + NOMBRE INSTRUCTOR"</li>
+            <li>🆔 Detecta certificados de cédula automáticamente</li>
+            <li>🗑️ Elimina páginas en blanco</li>
+            <li>🧹 Solo conserva el PDF unificado final</li>
           </ul>
-          <div style={{marginTop: '12px', padding: '8px', backgroundColor: '#fef2f2', borderRadius: '4px'}}>
-            <strong>Formato requerido:</strong> El PDF principal debe tener el formato "3283019 LAURA DANIELA TOQUICA LA ROTTA.pdf" 
-            (número de 6+ dígitos + espacio + nombre completo en mayúsculas)
+          <div style={highlightBox("#fef2f2")}>
+            <strong>Formato requerido:</strong> " Numero de ficha + Nombres y Apellidos Ej: 12345 JUAN DAVID PEREZ GONZALEZ.pdf"
           </div>
         </div>
 
+        {/* FINAL */}
         <div style={sectionStyle}>
-          <h3 style={{...sectionTitleStyle, color: '#7c3aed'}}>
-            📥 Proceso Final
-          </h3>
+          <h3 style={{ ...sectionTitleStyle, color: "#7c3aed" }}>📥 Proceso Final</h3>
           <p style={sectionContentStyle}>
-            Una vez completado el proceso con los juicios, este paso extrae los juicios de las carpetas y les asigna 
-            un sufijo "_OK" a aquellos que solo contienen en su nombre el formato 'FICHA + NOMBRES Y APELLIDOS DE INSTRUCTOR'. 
-            Si el nombre del archivo termina con un guion bajo (_), se le añade la etiqueta 'REPETIDO', lo que ayuda a 
-            identificar archivos duplicados o con problemas de nomenclatura.
+            Extrae los juicios finales. Archivos correctos reciben sufijo <code>_OK</code>; 
+            si terminan en guion bajo, se renombran como <code>_REPETIDO</code>.
           </p>
-          <div style={{marginTop: '12px', padding: '8px', backgroundColor: '#faf5ff', borderRadius: '4px'}}>
-            <strong>Resultado:</strong>
-            <ul style={{margin: '8px 0', paddingLeft: '20px'}}>
-              <li>Archivos correctos: "12345_Juan_Perez_OK.pdf"</li>
-              <li>Archivos repetidos: "12345_Juan_Perez_REPETIDO.pdf"</li>
+          <div style={highlightBox("#faf5ff")}>
+            <strong>Ejemplos:</strong>
+            <ul style={{ margin: "8px 0", paddingLeft: "20px" }}>
+              <li>✅ "12345 JUAN DAVID PEREZ GONZALEZ_OK.pdf"</li>
+              <li>⚠️ "12345 JUAN DAVID PEREZ GONZALEZ_REPETIDO.pdf"</li>
             </ul>
           </div>
         </div>
 
+        {/* TIP */}
         <div style={{
-          marginTop: '24px', 
-          padding: '16px', 
-          backgroundColor: '#f9fafb', 
-          borderRadius: '8px',
-          textAlign: 'center'
+          marginTop: "28px",
+          padding: "16px",
+          backgroundColor: "#f3f4f6",
+          borderRadius: "10px",
+          textAlign: "center"
         }}>
-          <p style={{margin: 0, color: '#6b7280', fontSize: '0.9rem'}}>
-            💡 <strong>Tip:</strong> Ejecuta los procesos en orden: Entrada → Intermedio Excel → Intermedio PDFs → Final para obtener los mejores resultados.
+          <p style={{ margin: 0, color: "#374151", fontSize: "0.95rem" }}>
+            💡 <strong>Consejo:</strong> Ejecuta los procesos en orden:  
+            <em> Entrada → Intermedio Excel → Intermedio PDFs → Final</em> para mejores resultados.
           </p>
         </div>
       </div>
