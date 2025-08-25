@@ -35,7 +35,7 @@ if not os.path.isdir(carpeta_excels) or not os.path.isdir(carpeta_fichas):
     print(json.dumps(resultado, ensure_ascii=False, indent=2))
     exit()
 
-patron_excel = re.compile(r'^plantilla_(\d+).(xlsx|xls|xlsm)$', re.IGNORECASE)
+patron_excel = re.compile(r'^plantilla_(\d+)\.(xlsx|xls|xlsm)$', re.IGNORECASE)
 
 # Listas para almacenar resultados
 archivos_movidos = []

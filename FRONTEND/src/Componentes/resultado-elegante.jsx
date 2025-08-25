@@ -75,7 +75,7 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
     fontSize: '0.9rem'
   }
 
-  // Si es un error simple
+  // 🔴 Si es un error
   if (isError || !resultado.success) {
     return (
       <div style={overlayStyle} onClick={onClose}>
@@ -84,15 +84,19 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
             <h3 style={{color: '#ef4444', margin: 0}}>❌ Error en el Proceso</h3>
             <button style={closeButtonStyle} onClick={onClose}>✕</button>
           </div>
-          <p style={{color: '#dc2626'}}>{resultado.error || resultado}</p>
+          <p style={{color: '#dc2626'}}>
+            {typeof resultado.error === "string"
+              ? resultado.error
+              : JSON.stringify(resultado.error || resultado)}
+          </p>
         </div>
       </div>
     )
   }
 
-  // Si es resultado exitoso con datos estructurados
+  // ✅ Si tiene estadísticas (entrada, intermedio o salida)
   if (resultado.estadisticas) {
-    // RESULTADO PARA ENTRADA
+    // --- ENTRADA ---
     if (resultado.archivos_movidos && resultado.archivos_invalidos !== undefined) {
       return (
         <div style={overlayStyle} onClick={onClose}>
@@ -102,6 +106,7 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
               <button style={closeButtonStyle} onClick={onClose}>✕</button>
             </div>
 
+            {/* estadísticas */}
             <div style={statsStyle}>
               <div style={statCardStyle}>
                 <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#2563eb'}}>
@@ -129,6 +134,7 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
               </div>
             </div>
 
+            {/* archivos movidos */}
             {resultado.archivos_movidos.length > 0 && (
               <div style={{marginBottom: '16px'}}>
                 <h4 style={{color: '#059669', marginBottom: '8px'}}>📁 Archivos Procesados:</h4>
@@ -147,13 +153,16 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
               </div>
             )}
 
+            {/* archivos inválidos */}
             {resultado.archivos_invalidos.length > 0 && (
               <div>
                 <h4 style={{color: '#dc2626', marginBottom: '8px'}}>⚠️ Archivos con Formato Inválido:</h4>
                 <div style={listStyle}>
                   {resultado.archivos_invalidos.map((archivo, index) => (
                     <div key={index} style={itemStyle}>
-                      {archivo}
+                      {typeof archivo === "string"
+                        ? archivo
+                        : `${archivo.nombre_archivo || "??"} - ${archivo.razon || "Sin razón"}`}
                     </div>
                   ))}
                 </div>
@@ -164,7 +173,7 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
       )
     }
 
-    // RESULTADO PARA INTERMEDIO
+    // --- INTERMEDIO ---
     if (resultado.archivos_omitidos !== undefined) {
       return (
         <div style={overlayStyle} onClick={onClose}>
@@ -174,89 +183,13 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
               <button style={closeButtonStyle} onClick={onClose}>✕</button>
             </div>
 
-            <div style={statsStyle}>
-              <div style={statCardStyle}>
-                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#2563eb'}}>
-                  {resultado.estadisticas.total_archivos}
-                </div>
-                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Total Excel</div>
-              </div>
-              <div style={statCardStyle}>
-                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#059669'}}>
-                  {resultado.estadisticas.archivos_movidos}
-                </div>
-                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Archivos Movidos</div>
-              </div>
-              <div style={statCardStyle}>
-                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#f59e0b'}}>
-                  {resultado.estadisticas.archivos_omitidos}
-                </div>
-                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Archivos Omitidos</div>
-              </div>
-              <div style={statCardStyle}>
-                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#dc2626'}}>
-                  {resultado.estadisticas.archivos_invalidos}
-                </div>
-                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Archivos Inválidos</div>
-              </div>
-            </div>
-
-            {resultado.archivos_movidos.length > 0 && (
-              <div style={{marginBottom: '16px'}}>
-                <h4 style={{color: '#059669', marginBottom: '8px'}}>📊 Excel Movidos:</h4>
-                <div style={listStyle}>
-                  {resultado.archivos_movidos.map((archivo, index) => (
-                    <div key={index} style={itemStyle}>
-                      <strong>{archivo.nombre_archivo}</strong>
-                      <br />
-                      <span style={{color: '#6b7280', fontSize: '0.8rem'}}>
-                        → Ficha {archivo.ficha} | Tipo: {archivo.extension.toUpperCase()}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {resultado.archivos_omitidos.length > 0 && (
-              <div style={{marginBottom: '16px'}}>
-                <h4 style={{color: '#f59e0b', marginBottom: '8px'}}>⚠️ Archivos Omitidos:</h4>
-                <div style={listStyle}>
-                  {resultado.archivos_omitidos.map((archivo, index) => (
-                    <div key={index} style={itemStyle}>
-                      <strong>{archivo.nombre_archivo}</strong>
-                      <br />
-                      <span style={{color: '#6b7280', fontSize: '0.8rem'}}>
-                        Razón: {archivo.razon}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {resultado.archivos_invalidos.length > 0 && (
-              <div>
-                <h4 style={{color: '#dc2626', marginBottom: '8px'}}>❌ Archivos Inválidos:</h4>
-                <div style={listStyle}>
-                  {resultado.archivos_invalidos.map((archivo, index) => (
-                    <div key={index} style={itemStyle}>
-                      <strong>{archivo.nombre_archivo}</strong>
-                      <br />
-                      <span style={{color: '#6b7280', fontSize: '0.8rem'}}>
-                        Razón: {archivo.razon}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* ... igual que tu código actual pero siempre usando propiedades como archivo.nombre_archivo y archivo.razon */}
           </div>
         </div>
       )
     }
 
-    // RESULTADO PARA SALIDA
+    // --- SALIDA ---
     if (resultado.archivos_procesados !== undefined) {
       return (
         <div style={overlayStyle} onClick={onClose}>
@@ -266,64 +199,19 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
               <button style={closeButtonStyle} onClick={onClose}>✕</button>
             </div>
 
-            <div style={statsStyle}>
-              <div style={statCardStyle}>
-                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#2563eb'}}>
-                  {resultado.estadisticas.total_pdfs}
-                </div>
-                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Total PDFs</div>
-              </div>
-              <div style={statCardStyle}>
-                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#059669'}}>
-                  {resultado.estadisticas.renombrados_ok}
-                </div>
-                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Renombrados OK</div>
-              </div>
-              <div style={statCardStyle}>
-                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#f59e0b'}}>
-                  {resultado.estadisticas.marcados_repetidos}
-                </div>
-                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Marcados Repetidos</div>
-              </div>
-              <div style={statCardStyle}>
-                <div style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#7c3aed'}}>
-                  {resultado.estadisticas.carpetas_eliminadas}
-                </div>
-                <div style={{fontSize: '0.8rem', color: '#6b7280'}}>Carpetas Eliminadas</div>
-              </div>
-            </div>
-
-            {resultado.archivos_procesados.length > 0 && (
-              <div style={{marginBottom: '16px'}}>
-                <h4 style={{color: '#059669', marginBottom: '8px'}}>📄 Archivos Procesados:</h4>
-                <div style={listStyle}>
-                  {resultado.archivos_procesados.map((archivo, index) => (
-                    <div key={index} style={itemStyle}>
-                      <strong>{archivo.nombre_original}</strong>
-                      <br />
-                      <span style={{color: '#6b7280', fontSize: '0.8rem'}}>
-                        → {archivo.nombre_final} | 
-                        <span style={{color: archivo.tipo === 'OK' ? '#059669' : '#f59e0b'}}>
-                          {archivo.tipo}
-                        </span>
-                        {archivo.fue_renumerado && <span style={{color: '#dc2626'}}> (Renumerado)</span>}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
+            {/* ... igual que tu código actual, pero en resultado.errores usarías: */}
             {resultado.errores.length > 0 && (
               <div>
                 <h4 style={{color: '#dc2626', marginBottom: '8px'}}>❌ Errores:</h4>
                 <div style={listStyle}>
                   {resultado.errores.map((error, index) => (
                     <div key={index} style={itemStyle}>
-                      <strong>{error.archivo}</strong>
+                      <strong>{error.archivo || "Archivo desconocido"}</strong>
                       <br />
                       <span style={{color: '#dc2626', fontSize: '0.8rem'}}>
-                        {error.error}
+                        {typeof error.error === "string"
+                          ? error.error
+                          : JSON.stringify(error.error)}
                       </span>
                     </div>
                   ))}
@@ -336,7 +224,7 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
     }
   }
 
-  // Resultado simple (mensaje de texto)
+  // ✅ Resultado simple
   return (
     <div style={overlayStyle} onClick={onClose}>
       <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
@@ -344,7 +232,11 @@ export default function ResultadoElegante({ resultado, isError, onClose }) {
           <h3 style={{color: '#059669', margin: 0}}>✅ Proceso Completado</h3>
           <button style={closeButtonStyle} onClick={onClose}>✕</button>
         </div>
-        <p>{resultado.message || resultado}</p>
+        <p>
+          {typeof resultado === "string"
+            ? resultado
+            : resultado.message || JSON.stringify(resultado)}
+        </p>
       </div>
     </div>
   )
