@@ -1,128 +1,131 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import "./styles.css"
 
-export default function EntradaPDF({ onSubmit }) {
+export default function EntradaPDF() {
   const [ruta, setRuta] = useState("");
   const [resultado, setResultado] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setResultado(null);
+
     try {
-      const response = await onSubmit({ ruta }, "entrada");
-      setResultado(response);
-      setRuta("");
-    } catch (error) {
-      console.error("Error:", error);
-      setResultado({ success: false, error: "Error al ejecutar el proceso" });
+      const formData = new FormData();
+      formData.append("ruta", ruta);
+
+      const res = await fetch("http://127.0.0.1:8000/entrada", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error("Error en la solicitud");
+      }
+
+      const data = await res.json();
+      setResultado(data);
+    } catch (err) {
+      setError("Hubo un problema al procesar la solicitud.");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <>
-      <div className="card">
-        <div className="card-header">
-          <h3 className="card-title-blue">📄 Proceso de Entrada de los PDFs</h3>
-        </div>
+    <div className="doc-container">
+      <div className="doc-card" data-component="entrada">
+        <h2 className="doc-card-title">📂 Procesar PDFs - Entrada</h2>
+        
+        <form onSubmit={handleSubmit}>
+          <div className="doc-input-button-group">
+            <input
+              type="text"
+              className="doc-form-input"
+              placeholder="Ingrese la ruta de la carpeta Principal"
+              value={ruta}
+              onChange={(e) => setRuta(e.target.value)}
+              required
+            />
+            <button 
+              type="submit" 
+              className="doc-btn doc-btn-entrada"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span className="doc-loading"></span> Procesando...
+                </>
+              ) : "Ejecutar"}
+            </button>
+          </div>
+        </form>
 
-        {/* 🔒 Contenedor que controla el ancho del formulario */}
-        <div className="form-container">
-          <label className="input-label">
-            Ruta de la carpeta donde están los juicios de evaluación:
-          </label>
+        {error && <div className="doc-error-message">{error}</div>}
 
-          <input
-            type="text"
-            value={ruta}
-            onChange={(e) => setRuta(e.target.value.replace(/\\/g, "/"))}
-            placeholder="C:/ruta/a/carpeta/pdfs"
-            className="input-text"
-          />
+        {resultado && (
+          <div className="doc-resultado">
+            <h3 className="doc-success-message">✅ {resultado.success ? "Proceso completado" : "Error en el proceso"}</h3>
+            
+            {resultado.success ? (
+              <>
+                <p>{resultado.mensaje}</p>
+                
+                <div className="doc-stats-container">
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.total_archivos}</div>
+                    <div>Total archivos</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.archivos_movidos}</div>
+                    <div>Archivos movidos</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.archivos_invalidos}</div>
+                    <div>Archivos inválidos</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.carpetas_creadas}</div>
+                    <div>Carpetas creadas</div>
+                  </div>
+                </div>
 
-          <button className="btn-blue" onClick={handleSubmit}>
-            🚀 Ejecutar Entrada
-          </button>
+                {resultado.archivos_movidos.length > 0 && (
+                  <>
+                    <h4>📑 Archivos Movidos</h4>
+                    <ul className="doc-file-list">
+                      {resultado.archivos_movidos.map((archivo, index) => (
+                        <li key={index} className="doc-file-item">
+                          <div><strong>{archivo.nombre_original}</strong> → {archivo.nombre_final}</div>
+                          <div>Ficha: {archivo.ficha} | Instructor: {archivo.instructor}</div>
+                          {archivo.fue_renombrado && <span className="doc-renamed"> (Renombrado)</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
 
-          {resultado && (
-            <div className={`resultado ${resultado.success ? "ok" : "err"}`}>
-              <h4 className={resultado.success ? "success-text" : "error-text"}>
-                {resultado.success ? "✅ Proceso completado" : "❌ Error en el proceso"}
-              </h4>
-              {resultado.mensaje && <p>{resultado.mensaje}</p>}
-              {resultado.error && <p className="error-text">{resultado.error}</p>}
-            </div>
-          )}
-        </div>
+                {resultado.archivos_invalidos.length > 0 && (
+                  <>
+                    <h4>⚠️ Archivos Inválidos</h4>
+                    <ul className="doc-file-list">
+                      {resultado.archivos_invalidos.map((inv, idx) => (
+                        <li key={idx} className="doc-file-item">{inv}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </>
+            ) : (
+              <div className="doc-error-message">{resultado.error}</div>
+            )}
+          </div>
+        )}
       </div>
-
-      {/* 🎨 Estilos */}
-      <style>{`
-        /* Evita que el padding aumente el ancho total */
-        .card, .card * { box-sizing: border-box; }
-
-        .card {
-          background: linear-gradient(145deg, #ffffff, #f9fafb);
-          padding: 28px;
-          border-radius: 16px;
-          box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-          border: 1px solid #e5e7eb;
-          max-width: 600px;
-          margin: 30px auto;
-          transition: transform .25s ease, box-shadow .25s ease;
-        }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 22px rgba(0,0,0,0.12); }
-
-        .card-header { margin-bottom: 10px; text-align: center; }
-        .card-title-blue {
-          font-size: 1.4rem; font-weight: 700; color: #2563eb;
-          display: flex; justify-content: center; align-items: center; gap: 10px;
-        }
-
-        /* 📐 Aquí se controla el ancho real del formulario */
-        .form-container {
-          width: 100%;
-          max-width: 420px;         /* <-- ajusta este valor para igualar todos los cards */
-          margin: 0 auto;           /* centra dentro de la card */
-          display: flex;
-          flex-direction: column;
-          gap: 14px;
-          padding-top: 8px;
-        }
-
-        .input-label {
-          font-size: 0.95rem; font-weight: 600; color: #374151; text-align: center;
-        }
-
-        .input-text {
-          width: 100%;              /* ocupa el ancho del contenedor (máx 420px) */
-          padding: 12px 16px;
-          border: 2px solid #e5e7eb;
-          border-radius: 12px;
-          font-size: 15px;
-          outline: none;
-          text-align: center;
-          transition: all .3s ease;
-        }
-        .input-text:focus { border-color: #2563eb; box-shadow: 0 0 6px rgba(37,99,235,.4); }
-
-        .btn-blue {
-          width: 100%;              /* botón del mismo ancho que el input */
-          background: linear-gradient(135deg, #2563eb, #1e40af);
-          color: white;
-          padding: 12px 18px;
-          border-radius: 12px;
-          border: none;
-          cursor: pointer;
-          font-weight: 700;
-          font-size: 1rem;
-          transition: background .3s, transform .2s;
-        }
-        .btn-blue:hover { background: linear-gradient(135deg, #1d4ed8, #1e3a8a); transform: scale(1.03); }
-
-        .resultado { margin-top: 10px; padding: 14px; border-radius: 12px; text-align: center; }
-        .resultado.ok { background: #ecfdf5; border: 1px solid #10b981; }
-        .resultado.err { background: #fef2f2; border: 1px solid #dc2626; }
-
-        .success-text { color: #059669; font-weight: bold; margin-bottom: 8px; }
-        .error-text { color: #dc2626; font-weight: bold; }
-      `}</style>
-    </>
+    </div>
   );
 }

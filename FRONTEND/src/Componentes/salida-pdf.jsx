@@ -1,174 +1,140 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import "./styles.css"
 
-export default function SalidaPDF({ onSubmit }) {
+const SalidaPDF = () => {
   const [ruta, setRuta] = useState("");
   const [resultado, setResultado] = useState(null);
+  const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
+  const manejarSubmit = async (e) => {
+    e.preventDefault();
+    setCargando(true);
+    setError("");
+    setResultado(null);
+
     try {
-      const response = await onSubmit({ ruta }, "salida");
-      setResultado(response);
-      setRuta("");
-    } catch (error) {
-      console.error("Error:", error);
-      setResultado({
-        success: false,
-        error: "Error al ejecutar el proceso",
+      const formData = new FormData();
+      formData.append("ruta", ruta);
+
+      const response = await fetch("http://127.0.0.1:8000/salida", {
+        method: "POST",
+        body: formData,
       });
+
+      if (!response.ok) throw new Error("Error en la petición al servidor");
+
+      const data = await response.json();
+      setResultado(data);
+    } catch (err) {
+      setError("❌ " + err.message);
+    } finally {
+      setCargando(false);
     }
   };
 
   return (
-    <>
-      <div className="card">
-        <div className="card-header">
-          <h3 className="card-title-purple">📥 Proceso de Salida de los PDFs</h3>
-        </div>
-        <div className="card-content">
-          <div>
-            <label className="input-label">
-              Ruta de la carpeta donde están las subcarpetas con los juicios de
-              evaluación ya listos:
-            </label>
+    <div className="doc-container">
+      <div className="doc-card" data-component="salida">
+        <h2 className="doc-card-title">📤 Procesar PDFs - Salida</h2>
+        
+        <form onSubmit={manejarSubmit}>
+          <div className="doc-form-group">
             <input
               type="text"
+              className="doc-form-input"
+              placeholder="Ingrese la ruta de la carpeta Principal"
               value={ruta}
-              onChange={(e) => setRuta(e.target.value.replace(/\\/g, "/"))}
-              placeholder="C:/ruta/salida"
-              className="input-text"
+              onChange={(e) => setRuta(e.target.value)}
+              required
             />
           </div>
-          <div className="button-container">
-            <button className="btn-purple" onClick={handleSubmit}>
-              ⚡ Ejecutar Salida
-            </button>
+          <button 
+            type="submit" 
+            className="doc-btn doc-btn-salida"
+            disabled={cargando}
+          >
+            {cargando ? (
+              <>
+                <span className="doc-loading"></span> Procesando...
+              </>
+            ) : "Ejecutar"}
+          </button>
+        </form>
+
+        {error && <div className="doc-error-message">{error}</div>}
+
+        {resultado && (
+          <div className="doc-resultado">
+            {resultado.success ? (
+              <>
+                <h3 className="doc-success-message">✅ {resultado.mensaje}</h3>
+                
+                <div className="doc-stats-container">
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.total_pdfs}</div>
+                    <div>Total PDFs</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.renombrados_ok}</div>
+                    <div>Renombrados OK</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.marcados_repetidos}</div>
+                    <div>Marcados Repetidos</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.errores}</div>
+                    <div>Errores</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.carpetas_eliminadas}</div>
+                    <div>Carpetas Eliminadas</div>
+                  </div>
+                </div>
+
+                {resultado.archivos_procesados.length > 0 && (
+                  <>
+                    <h4>📑 Archivos Procesados</h4>
+                    <ul className="doc-file-list">
+                      {resultado.archivos_procesados.map((archivo, index) => (
+                        <li key={index} className="doc-file-item">
+                          <div><strong>{archivo.nombre_original}</strong> → {archivo.nombre_final}</div>
+                          <div>Tipo: {archivo.tipo}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                {resultado.errores.length > 0 && (
+                  <>
+                    <h4>⚠️ Errores</h4>
+                    <ul className="doc-file-list">
+                      {resultado.errores.map((err, index) => (
+                        <li key={index} className="doc-file-item doc-error-item">
+                          {err.archivo ? (
+                            <>
+                              <div><strong>{err.archivo}:</strong></div>
+                              <div>{err.error}</div>
+                            </>
+                          ) : (
+                            <div>{err.error}</div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </>
+            ) : (
+              <div className="doc-error-message">❌ {resultado.error}</div>
+            )}
           </div>
-
-          {resultado && (
-            <div className="resultado">
-              <h4 className={resultado.success ? "success-text" : "error-text"}>
-                {resultado.success
-                  ? "✅ Proceso completado"
-                  : "❌ Error en el proceso"}
-              </h4>
-
-              {resultado.mensaje && <p>{resultado.mensaje}</p>}
-              {resultado.error && (
-                <p className="error-text">{resultado.error}</p>
-              )}
-            </div>
-          )}
-        </div>
+        )}
       </div>
-
-      {/* 🎨 Estilos CSS */}
-      <style>{`
-        .card {
-          background: linear-gradient(145deg, #ffffff, #f9fafb);
-          padding: 28px;
-          border-radius: 16px;
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-          border: 1px solid #e5e7eb;
-          max-width: 600px;
-          margin: 30px auto;
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
-        }
-
-        .card-header {
-          margin-bottom: 18px;
-          text-align: center;
-        }
-
-        .card-title-purple {
-          font-size: 1.4rem;
-          font-weight: 700;
-          color: #7c3aed;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .card-content {
-          display: flex;
-          flex-direction: column;
-          gap: 22px;
-        }
-
-        .input-label {
-          display: block;
-          font-size: 0.95rem;
-          font-weight: 600;
-          color: #374151;
-          margin-bottom: 8px;
-          text-align: center;
-        }
-
-        .input-text {
-          width: 100%;
-          max-width: 380px;
-          margin: 0 auto;
-          padding: 12px 16px;
-          border: 2px solid #e5e7eb;
-          border-radius: 10px;
-          font-size: 15px;
-          outline: none;
-          text-align: center;
-          transition: all 0.3s ease;
-        }
-
-        .input-text:focus {
-          border-color: #7c3aed;
-          box-shadow: 0 0 6px rgba(124, 58, 237, 0.4);
-        }
-
-        .button-container {
-          display: flex;
-          justify-content: center;
-        }
-
-        .btn-purple {
-          width: 240px;
-          background: linear-gradient(135deg, #7c3aed, #6d28d9);
-          color: white;
-          padding: 12px 18px;
-          border-radius: 10px;
-          border: none;
-          cursor: pointer;
-          font-weight: 600;
-          font-size: 1rem;
-          transition: background 0.3s, transform 0.2s;
-        }
-
-        .btn-purple:hover {
-          background: linear-gradient(135deg, #6d28d9, #5b21b6);
-          transform: scale(1.07);
-        }
-
-        .resultado {
-          margin-top: 25px;
-          padding: 18px;
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          background: #f9fafb;
-        }
-
-        .success-text {
-          color: #059669;
-          margin-bottom: 15px;
-          font-weight: bold;
-        }
-
-        .error-text {
-          color: #dc2626;
-          font-weight: bold;
-        }
-      `}</style>
-    </>
+    </div>
   );
-}
+};
+
+export default SalidaPDF;

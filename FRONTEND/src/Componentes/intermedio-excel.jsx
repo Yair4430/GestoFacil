@@ -1,250 +1,157 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import "./styles.css"
 
-export default function IntermedioExcel({ onSubmit }) {
+export default function IntermedioExcel() {
   const [rutaExcels, setRutaExcels] = useState("");
   const [rutaFichas, setRutaFichas] = useState("");
   const [resultado, setResultado] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setResultado(null);
+
     try {
-      const response = await onSubmit({ rutaExcels, rutaFichas }, "intermedio");
-      setResultado(response);
-      setRutaExcels("");
-      setRutaFichas("");
-    } catch (error) {
-      console.error("Error:", error);
-      setResultado({
-        success: false,
-        error: "Error al ejecutar el proceso"
+      const formData = new FormData();
+      formData.append("rutaExcels", rutaExcels);
+      formData.append("rutaFichas", rutaFichas);
+
+      const res = await fetch("http://127.0.0.1:8000/intermedio", {
+        method: "POST",
+        body: formData,
       });
+
+      if (!res.ok) throw new Error("Error en la solicitud");
+
+      const data = await res.json();
+      setResultado(data);
+    } catch (err) {
+      setError("Hubo un problema al procesar la solicitud.");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const renderLista = (titulo, items) => {
-    if (!items || items.length === 0) return null;
-
-    return (
-      <div className="lista-section">
-        <h4>{titulo} ({items.length})</h4>
-        <ul className="lista">
-          {items.map((item, index) => (
-            <li key={index} className="lista-item">
-              {item.nombre_archivo}
-              {item.razon && ` - ${item.razon}`}
-              {item.ficha && ` - Ficha: ${item.ficha}`}
-              {item.extension && ` - Extensión: ${item.extension}`}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
-
   return (
-    <>
-      <div className="card">
-        <div className="card-header">
-          <h3 className="card-title">📊 Proceso Intermedio de los Excel</h3>
-        </div>
-        <div className="card-content">
-          <div>
-            <label className="input-label">
-              Ruta de la carpeta donde están los Excel:
-            </label>
+    <div className="doc-container">
+      <div className="doc-card" data-component="intermedio-excel">
+        <h2 className="doc-card-title">📊 Procesar Excels - Intermedio</h2>
+
+        <form onSubmit={handleSubmit}>
+          <div className="doc-form-group">
             <input
               type="text"
+              className="doc-form-input"
+              placeholder="Ingrese la ruta de la carpeta con los Excels"
               value={rutaExcels}
-              onChange={(e) => setRutaExcels(e.target.value.replace(/\\/g, "/"))}
-              placeholder="C:/ruta/archivo.xlsx"
-              className="input-text"
+              onChange={(e) => setRutaExcels(e.target.value)}
+              required
             />
           </div>
-          <div>
-            <label className="input-label">
-              Ruta de la carpeta donde están las subcarpetas:
-            </label>
+          <div className="doc-form-group">
             <input
               type="text"
+              className="doc-form-input"
+              placeholder="Ingrese la ruta de la carpeta con las subcarpetas"
               value={rutaFichas}
-              onChange={(e) => setRutaFichas(e.target.value.replace(/\\/g, "/"))}
-              placeholder="C:/ruta/a/fichas"
-              className="input-text"
+              onChange={(e) => setRutaFichas(e.target.value)}
+              required
             />
           </div>
-          <div className="button-container">
-            <button className="btn-success" onClick={handleSubmit}>
-              ⚡ Ejecutar Intermedio
-            </button>
-          </div>
+          <button 
+            type="submit" 
+            className="doc-btn doc-btn-intermedio-excel"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="doc-loading"></span> Procesando...
+              </>
+            ) : "Ejecutar"}
+          </button>
+        </form>
 
-          {resultado && (
-            <div className="resultado">
-              <h4 className={resultado.success ? "success-text" : "error-text"}>
-                {resultado.success ? "✅ Proceso completado" : "❌ Error en el proceso"}
-              </h4>
+        {error && <div className="doc-error-message">{error}</div>}
 
-              {resultado.mensaje && <p>{resultado.mensaje}</p>}
-              {resultado.error && <p className="error-text">{resultado.error}</p>}
-
-              {resultado.estadisticas && (
-                <div className="estadisticas">
-                  <p><strong>Total archivos:</strong> {resultado.estadisticas.total_archivos}</p>
-                  <p><strong>Archivos movidos:</strong> {resultado.estadisticas.archivos_movidos}</p>
-                  <p><strong>Archivos omitidos:</strong> {resultado.estadisticas.archivos_omitidos}</p>
-                  <p><strong>Archivos inválidos:</strong> {resultado.estadisticas.archivos_invalidos}</p>
+        {resultado && (
+          <div className="doc-resultado">
+            <h3 className="doc-success-message">✅ {resultado.success ? "Proceso completado" : "Error en el proceso"}</h3>
+            
+            {resultado.success ? (
+              <>
+                <p>{resultado.mensaje}</p>
+                
+                <div className="doc-stats-container">
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.total_archivos}</div>
+                    <div>Total archivos</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.archivos_movidos}</div>
+                    <div>Archivos movidos</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.archivos_omitidos}</div>
+                    <div>Archivos omitidos</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.estadisticas.archivos_invalidos}</div>
+                    <div>Archivos inválidos</div>
+                  </div>
                 </div>
-              )}
 
-              {renderLista("Archivos movidos", resultado.archivos_movidos)}
-              {renderLista("Archivos omitidos", resultado.archivos_omitidos)}
-              {renderLista("Archivos inválidos", resultado.archivos_invalidos)}
-            </div>
-          )}
-        </div>
+                {resultado.archivos_movidos.length > 0 && (
+                  <>
+                    <h4>📁 Archivos Movidos</h4>
+                    <ul className="doc-file-list">
+                      {resultado.archivos_movidos.map((archivo, idx) => (
+                        <li key={idx} className="doc-file-item">
+                          <div><strong>{archivo.nombre_archivo}</strong> → {archivo.carpeta_destino}</div>
+                          <div>Ficha: {archivo.ficha} | Ext: {archivo.extension}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                {resultado.archivos_omitidos.length > 0 && (
+                  <>
+                    <h4>⚠️ Archivos Omitidos</h4>
+                    <ul className="doc-file-list">
+                      {resultado.archivos_omitidos.map((archivo, idx) => (
+                        <li key={idx} className="doc-file-item">
+                          <div><strong>{archivo.nombre_archivo}</strong></div>
+                          <div>Razón: {archivo.razon}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                {resultado.archivos_invalidos.length > 0 && (
+                  <>
+                    <h4>❌ Archivos Inválidos</h4>
+                    <ul className="doc-file-list">
+                      {resultado.archivos_invalidos.map((archivo, idx) => (
+                        <li key={idx} className="doc-file-item">
+                          <div><strong>{archivo.nombre_archivo}</strong></div>
+                          <div>Razón: {archivo.razon}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </>
+            ) : (
+              <div className="doc-error-message">{resultado.error}</div>
+            )}
+          </div>
+        )}
       </div>
-
-      {/* 🎨 Estilos CSS */}
-      <style>{`
-        .card {
-          background: linear-gradient(145deg, #ffffff, #f9fafb);
-          padding: 28px;
-          border-radius: 16px;
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-          border: 1px solid #e5e7eb;
-          max-width: 600px;
-          margin: 30px auto;
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
-        }
-
-        .card-header {
-          margin-bottom: 18px;
-          text-align: center;
-        }
-
-        .card-title {
-          font-size: 1.4rem;
-          font-weight: 700;
-          color: #059669;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .card-content {
-          display: flex;
-          flex-direction: column;
-          gap: 22px;
-        }
-
-        .input-label {
-          display: block;
-          font-size: 0.95rem;
-          font-weight: 600;
-          color: #374151;
-          margin-bottom: 8px;
-          text-align: center;
-        }
-
-        .input-text {
-          width: 100%;
-          max-width: 380px;
-          margin: 0 auto;
-          padding: 12px 16px;
-          border: 2px solid #e5e7eb;
-          border-radius: 10px;
-          font-size: 15px;
-          outline: none;
-          text-align: center;
-          transition: all 0.3s ease;
-        }
-
-        .input-text:focus {
-          border-color: #059669;
-          box-shadow: 0 0 6px rgba(5, 150, 105, 0.4);
-        }
-
-        .button-container {
-          display: flex;
-          justify-content: center;
-        }
-
-        .btn-success {
-          width: 240px;
-          background: linear-gradient(135deg, #059669, #047857);
-          color: white;
-          padding: 12px 18px;
-          border-radius: 10px;
-          border: none;
-          cursor: pointer;
-          font-weight: 600;
-          font-size: 1rem;
-          transition: background 0.3s, transform 0.2s;
-        }
-
-        .btn-success:hover {
-          background: linear-gradient(135deg, #047857, #065f46);
-          transform: scale(1.07);
-        }
-
-        .resultado {
-          margin-top: 25px;
-          padding: 18px;
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          background: #f9fafb;
-        }
-
-        .success-text {
-          color: #059669;
-          margin-bottom: 15px;
-          font-weight: bold;
-        }
-
-        .error-text {
-          color: #dc2626;
-          font-weight: bold;
-        }
-
-        .estadisticas {
-          margin-top: 10px;
-          background: #ffffff;
-          padding: 12px;
-          border-radius: 8px;
-          border: 1px solid #e5e7eb;
-        }
-
-        .lista-section {
-          margin-top: 15px;
-        }
-
-        .lista-section h4 {
-          margin-bottom: 10px;
-          color: #374151;
-        }
-
-        .lista {
-          padding-left: 20px;
-        }
-
-        .lista-item {
-          margin-bottom: 8px;
-          padding: 10px;
-          background-color: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          transition: background-color 0.2s;
-        }
-
-        .lista-item:hover {
-          background-color: #f0fdf4;
-        }
-      `}</style>
-    </>
+    </div>
   );
 }

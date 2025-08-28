@@ -1,173 +1,118 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import "./styles.css"
 
-export default function IntermedioPDF({ onSubmit }) {
+export default function IntermedioPDF() {
   const [ruta, setRuta] = useState("");
   const [resultado, setResultado] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setResultado(null);
+
     try {
-      const response = await onSubmit({ ruta }, "intermedio-pdfs");
-      setResultado(response);
-      setRuta("");
-    } catch (error) {
-      console.error("Error:", error);
-      setResultado({
-        success: false,
-        error: "Error al ejecutar el proceso",
+      const formData = new FormData();
+      formData.append("ruta", ruta);
+
+      const res = await fetch("http://127.0.0.1:8000/intermedio-pdfs", {
+        method: "POST",
+        body: formData,
       });
+
+      if (!res.ok) throw new Error("Error en la solicitud");
+
+      const data = await res.json();
+      setResultado(data);
+    } catch (err) {
+      setError("Hubo un problema al procesar la solicitud.");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <>
-      <div className="card">
-        <div className="card-header">
-          <h3 className="card-title-red">🔄 Proceso Intermedio de PDFs</h3>
-        </div>
-        <div className="card-content">
-          <div>
-            <label className="input-label">
-              Ruta de la carpeta con los PDFs a unir:
-            </label>
+    <div className="doc-container">
+      <div className="doc-card" data-component="intermedio-pdf">
+        <h2 className="doc-card-title">📑 Procesar PDFs - Intermedio</h2>
+
+        <form onSubmit={handleSubmit}>
+          <div className="doc-form-group">
             <input
               type="text"
+              className="doc-form-input"
+              placeholder="Ingrese la ruta de la carpeta principal con PDFS"
               value={ruta}
-              onChange={(e) => setRuta(e.target.value.replace(/\\/g, "/"))}
-              placeholder="C:/ruta/a/carpeta/pdfs"
-              className="input-text"
+              onChange={(e) => setRuta(e.target.value)}
+              required
             />
           </div>
-          <div className="button-container">
-            <button className="btn-danger" onClick={handleSubmit}>
-              ⚡ Ejecutar Intermedio
-            </button>
+          <button 
+            type="submit" 
+            className="doc-btn doc-btn-intermedio-pdf"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="doc-loading"></span> Procesando...
+              </>
+            ) : "Ejecutar"}
+          </button>
+        </form>
+
+        {error && <div className="doc-error-message">{error}</div>}
+
+        {resultado && (
+          <div className="doc-resultado">
+            {"error" in resultado ? (
+              <div className="doc-error-message">{resultado.error}</div>
+            ) : (
+              <>
+                <h3 className="doc-success-message">✅ Proceso completado</h3>
+                
+                <div className="doc-stats-container">
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.carpetas_procesadas}</div>
+                    <div>Carpetas procesadas</div>
+                  </div>
+                  <div className="doc-stat-item">
+                    <div className="doc-stat-value">{resultado.carpetas_con_errores}</div>
+                    <div>Carpetas con errores</div>
+                  </div>
+                </div>
+
+                <h4>📂 Detalle por carpeta</h4>
+                <div className="doc-folder-details">
+                  {resultado.resultados_detallados.map((carpeta, idx) => (
+                    <div key={idx} className="doc-folder-item">
+                      <h5>{carpeta.carpeta}</h5>
+                      <div className="doc-folder-stats">
+                        <span>Archivos: {carpeta.archivos_procesados}</span>
+                        <span>Páginas: {carpeta.total_paginas}</span>
+                        <span>Archivo final: {carpeta.archivo_final || "No generado"}</span>
+                      </div>
+                      
+                      {carpeta.errores.length > 0 && (
+                        <div className="doc-error-list">
+                          <h6>Errores:</h6>
+                          <ul>
+                            {carpeta.errores.map((err, i) => (
+                              <li key={i}>⚠️ {err}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
-
-          {resultado && (
-            <div className="resultado">
-              <h4 className={resultado.success ? "success-text" : "error-text"}>
-                {resultado.success
-                  ? "✅ Proceso completado"
-                  : "❌ Error en el proceso"}
-              </h4>
-
-              {resultado.mensaje && <p>{resultado.mensaje}</p>}
-              {resultado.error && (
-                <p className="error-text">{resultado.error}</p>
-              )}
-            </div>
-          )}
-        </div>
+        )}
       </div>
-
-      {/* 🎨 Estilos CSS */}
-      <style>{`
-        .card {
-          background: linear-gradient(145deg, #ffffff, #f9fafb);
-          padding: 28px;
-          border-radius: 16px;
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-          border: 1px solid #e5e7eb;
-          max-width: 600px;
-          margin: 30px auto;
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
-        }
-
-        .card-header {
-          margin-bottom: 18px;
-          text-align: center;
-        }
-
-        .card-title-red {
-          font-size: 1.4rem;
-          font-weight: 700;
-          color: #dc2626;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .card-content {
-          display: flex;
-          flex-direction: column;
-          gap: 22px;
-        }
-
-        .input-label {
-          display: block;
-          font-size: 0.95rem;
-          font-weight: 600;
-          color: #374151;
-          margin-bottom: 8px;
-          text-align: center;
-        }
-
-        .input-text {
-          width: 100%;
-          max-width: 380px;
-          margin: 0 auto;
-          padding: 12px 16px;
-          border: 2px solid #e5e7eb;
-          border-radius: 10px;
-          font-size: 15px;
-          outline: none;
-          text-align: center;
-          transition: all 0.3s ease;
-        }
-
-        .input-text:focus {
-          border-color: #dc2626;
-          box-shadow: 0 0 6px rgba(220, 38, 38, 0.4);
-        }
-
-        .button-container {
-          display: flex;
-          justify-content: center;
-        }
-
-        .btn-danger {
-          width: 240px;
-          background: linear-gradient(135deg, #dc2626, #b91c1c);
-          color: white;
-          padding: 12px 18px;
-          border-radius: 10px;
-          border: none;
-          cursor: pointer;
-          font-weight: 600;
-          font-size: 1rem;
-          transition: background 0.3s, transform 0.2s;
-        }
-
-        .btn-danger:hover {
-          background: linear-gradient(135deg, #b91c1c, #991b1b);
-          transform: scale(1.07);
-        }
-
-        .resultado {
-          margin-top: 25px;
-          padding: 18px;
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          background: #f9fafb;
-        }
-
-        .success-text {
-          color: #059669;
-          margin-bottom: 15px;
-          font-weight: bold;
-        }
-
-        .error-text {
-          color: #dc2626;
-          font-weight: bold;
-        }
-      `}</style>
-    </>
+    </div>
   );
 }
