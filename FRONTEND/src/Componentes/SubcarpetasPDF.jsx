@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./styles.css"
 
-export default function EntradaPDF() {
+export default function SubcarpetasPDF() {
   const [ruta, setRuta] = useState("");
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ export default function EntradaPDF() {
   return (
     <div className="doc-container">
       <div className="doc-card" data-component="entrada">
-        <h2 className="doc-card-title">📂 Procesar PDFs - Entrada</h2>
+        <h2 className="doc-card-title">📂Crear Subcarpetas y organizar PDFs</h2>
         
         <form onSubmit={handleSubmit}>
           <div className="doc-input-button-group">

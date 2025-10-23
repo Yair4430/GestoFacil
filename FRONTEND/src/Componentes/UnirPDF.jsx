@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./styles.css"
 
-export default function IntermedioPDF() {
+export default function UnirPDF() {
   const [ruta, setRuta] = useState("");
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ export default function IntermedioPDF() {
   return (
     <div className="doc-container">
       <div className="doc-card" data-component="intermedio-pdf">
-        <h2 className="doc-card-title">📑 Procesar PDFs - Intermedio</h2>
+        <h2 className="doc-card-title">📑 Unir PDFs de cada Subcarpeta Jucio + Certificados</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="doc-form-group">

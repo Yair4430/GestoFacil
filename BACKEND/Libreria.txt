@@ -1,2 +1,3 @@
 pip install fastapi uvicorn python-multipart
 pip install uvicorn
+pip install pdfplumber

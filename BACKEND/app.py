@@ -17,11 +17,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.post("/entrada-extractornombre")
+def ejecutar_entrada_extractornombre(ruta: str = Form(...)):
+    try:
+        result = subprocess.run(
+            ["python", os.path.join(base_dir, "RenombrarPDF.py"), ruta],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+
+        try:
+            resultado_json = json.loads(result.stdout)
+            return resultado_json
+        except json.JSONDecodeError:
+            return {"message": result.stdout or "Entrada_ExtraerNombre ejecutado correctamente"}
+
+    except subprocess.CalledProcessError as e:
+        return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
+
+
 @app.post("/entrada")
 def ejecutar_entrada(ruta: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "Entrada_PDFS.py"), ruta],
+            ["python", os.path.join(base_dir, "SubcarpetasPDF.py"), ruta],
             check=True,
             capture_output=True,
             text=True
@@ -40,7 +60,7 @@ def ejecutar_entrada(ruta: str = Form(...)):
 def ejecutar_intermedio(rutaExcels: str = Form(...), rutaFichas: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "Intermedio_EXCEL.py"), rutaExcels, rutaFichas], 
+            ["python", os.path.join(base_dir, "OrganizadorEXCEL.py"), rutaExcels, rutaFichas], 
             check=True,
             capture_output=True,
             text=True
@@ -59,7 +79,7 @@ def ejecutar_intermedio(rutaExcels: str = Form(...), rutaFichas: str = Form(...)
 def ejecutar_intermedio_pdfs(ruta: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "Intermedio_PDFS.py"), ruta],
+            ["python", os.path.join(base_dir, "UnirPDF.py"), ruta],
             check=True,
             capture_output=True,
             text=True
@@ -78,7 +98,7 @@ def ejecutar_intermedio_pdfs(ruta: str = Form(...)):
 def ejecutar_salida(ruta: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "Salida_PDFS.py"), ruta],
+            ["python", os.path.join(base_dir, "RenombrarPDFFinal.py"), ruta],
             check=True,
             capture_output=True,
             text=True

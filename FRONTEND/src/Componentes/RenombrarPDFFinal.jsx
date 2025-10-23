@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./styles.css"
 
-const SalidaPDF = () => {
+const RenombrarPDFFinal = () => {
   const [ruta, setRuta] = useState("");
   const [resultado, setResultado] = useState(null);
   const [cargando, setCargando] = useState(false);
@@ -36,7 +36,7 @@ const SalidaPDF = () => {
   return (
     <div className="doc-container">
       <div className="doc-card" data-component="salida">
-        <h2 className="doc-card-title">📤 Procesar PDFs - Salida</h2>
+        <h2 className="doc-card-title">📤 Renombrar PDFs, Sacarlos y borralos de las Subcarpetas</h2>
         
         <form onSubmit={manejarSubmit}>
           <div className="doc-form-group">
@@ -137,4 +137,4 @@ const SalidaPDF = () => {
   );
 };
 
-export default SalidaPDF;
+export default RenombrarPDFFinal;

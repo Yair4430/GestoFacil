@@ -1,5 +1,10 @@
 /* App.css */
 :root {
+
+  --doc-entrada-extractornombre: #06b6d4;
+  --doc-entrada-extractornombre-hover: #0891b2;
+  --doc-entrada-extractornombre-light: #cffafe;
+
   /* Colores para entrada */
   --doc-entrada: #6366f1;
   --doc-entrada-hover: #4f46e5;
@@ -185,4 +190,34 @@ body {
   .app-header h1 {
     font-size: 1.5rem;
   }
+}
+/* Forzar que el tab siempre sea turquesa (inactivo o activo) */
+.tab-button.entrada-extractornombre {
+  background: var(--doc-entrada-extractornombre) !important;
+  color: white !important;
+  box-shadow: 0 2px 4px rgba(6, 182, 212, 0.18);
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+/* Hover: un tono más oscuro */
+.tab-button.entrada-extractornombre:hover {
+  background: var(--doc-entrada-extractornombre-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(8, 145, 178, 0.18);
+}
+
+/* Activo: intensificar ligeramente (pero sigue siendo turquesa) */
+.tab-button.entrada-extractornombre.active {
+  background: var(--doc-entrada-extractornombre-hover) !important;
+  color: white !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(8, 145, 178, 0.22);
+}
+
+/* Si por alguna regla global tus tabs ponen fondo blanco cuando no están activos,
+   esta regla evita que el de entrada-extractornombre se vuelva blanco */
+.tabs-container .tab-button.entrada-extractornombre {
+  background: var(--doc-entrada-extractornombre) !important;
+  color: white !important;
 }

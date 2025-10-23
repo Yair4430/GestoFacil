@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./styles.css"
 
-export default function IntermedioExcel() {
+export default function OrganizadorEXCEL() {
   const [rutaExcels, setRutaExcels] = useState("");
   const [rutaFichas, setRutaFichas] = useState("");
   const [resultado, setResultado] = useState(null);
@@ -39,7 +39,7 @@ export default function IntermedioExcel() {
   return (
     <div className="doc-container">
       <div className="doc-card" data-component="intermedio-excel">
-        <h2 className="doc-card-title">📊 Procesar Excels - Intermedio</h2>
+        <h2 className="doc-card-title">📊 Organizador de Excel a Subcarpetas</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="doc-form-group">
