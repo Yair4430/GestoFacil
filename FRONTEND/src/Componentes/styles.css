@@ -15,6 +15,10 @@
   --doc-intermedio-excel-hover: #059669;
   --doc-intermedio-excel-light: #d1fae5;
   
+  --doc-extraer-aprendiz: #7c3aed; /* Violeta */
+  --doc-extraer-aprendiz-hover: #6d28d9;
+  --doc-extraer-aprendiz-light: #ede9fe;
+
   --doc-intermedio-pdf: #f59e0b;
   --doc-intermedio-pdf-hover: #d97706;
   --doc-intermedio-pdf-light: #fef3c7;
@@ -415,4 +419,30 @@
 
 .tab-button.entrada-extractornombre.active {
   background-color: var(--doc-entrada-extractornombre);
+}
+
+/* Borde superior personalizado */
+.doc-card[data-component="extraer-aprendiz"] {
+  border-top-color: var(--doc-extraer-aprendiz);
+}
+
+/* Botón principal del componente */
+.doc-btn-extraer-aprendiz {
+  background-color: var(--doc-extraer-aprendiz);
+  color: white;
+}
+
+.doc-btn-extraer-aprendiz:hover:not(:disabled) {
+  background-color: var(--doc-extraer-aprendiz-hover);
+  transform: translateY(-1px);
+}
+
+/* Colores de estadísticas */
+.doc-card[data-component="extraer-aprendiz"] .doc-stat-value {
+  color: var(--doc-extraer-aprendiz);
+}
+
+/* Bordes de ítems de lista */
+.doc-card[data-component="extraer-aprendiz"] .doc-file-item {
+  border-left: 3px solid var(--doc-extraer-aprendiz);
 }

@@ -75,6 +75,32 @@ def ejecutar_intermedio(rutaExcels: str = Form(...), rutaFichas: str = Form(...)
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
+@app.post("/extraer-datos-aprendices")
+def ejecutar_extraer_datos(ruta: str = Form(...)):
+    try:
+        result = subprocess.run(
+            ["python", os.path.join(base_dir, "ExtraerInfAprendiz.py"), ruta],
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding='utf-8'
+        )
+        
+        try:
+            resultado_json = json.loads(result.stdout)
+            return resultado_json
+        except json.JSONDecodeError:
+            return {
+                "message": result.stdout or "ExtraerInfAprendiz ejecutado correctamente",
+                "output": result.stdout
+            }
+            
+    except subprocess.CalledProcessError as e:
+        return JSONResponse(
+            status_code=500, 
+            content={"error": e.stderr or str(e)}
+        )
+
 @app.post("/intermedio-pdfs")
 def ejecutar_intermedio_pdfs(ruta: str = Form(...)):
     try:

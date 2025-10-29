@@ -15,6 +15,10 @@
   --doc-intermedio-excel-hover: #059669;
   --doc-intermedio-excel-light: #d1fae5;
 
+  --doc-extraer-aprendiz: #7c3aed;
+  --doc-extraer-aprendiz-hover: #6d28d9;
+  --doc-extraer-aprendiz-light: #ede9fe;
+
   /* Colores para intermedio PDF */
   --doc-intermedio-pdf: #f59e0b;
   --doc-intermedio-pdf-hover: #d97706;
@@ -220,4 +224,26 @@ body {
 .tabs-container .tab-button.entrada-extractornombre {
   background: var(--doc-entrada-extractornombre) !important;
   color: white !important;
+}
+
+/* === Botón Extraer Info Aprendices === */
+.tab-button.extraer-aprendices {
+  background: var(--doc-extraer-aprendiz);
+  color: white;
+  box-shadow: 0 2px 4px rgba(124, 58, 237, 0.18);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.tab-button.extraer-aprendices:hover {
+  background: var(--doc-extraer-aprendiz-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(109, 40, 217, 0.25);
+}
+
+.tab-button.extraer-aprendices.active {
+  background: var(--doc-extraer-aprendiz-hover);
+  box-shadow: 0 8px 18px rgba(109, 40, 217, 0.3),
+              inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
 }
