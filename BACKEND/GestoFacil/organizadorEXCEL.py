@@ -1,5 +1,6 @@
 import os, re, shutil, sys, json
 
+# Validación inicial de argumentos de línea de comandos
 if len(sys.argv) < 3:
     resultado = {
         "success": False,
@@ -17,6 +18,7 @@ if len(sys.argv) < 3:
 carpeta_excels = sys.argv[1]
 carpeta_fichas = sys.argv[2]
 
+# Verifica que las rutas proporcionadas sean carpetas válidas
 if not os.path.isdir(carpeta_excels) or not os.path.isdir(carpeta_fichas):
     resultado = {
         "success": False,
@@ -31,6 +33,7 @@ if not os.path.isdir(carpeta_excels) or not os.path.isdir(carpeta_fichas):
     print(json.dumps(resultado, ensure_ascii=False, indent=2))
     exit()
 
+# Patrón para detectar archivos Excel con formato plantilla_<número_ficha>
 patron_excel = re.compile(r'^plantilla_(\d+)\.(xlsx|xls|xlsm)$', re.IGNORECASE)
 
 archivos_movidos = []
@@ -38,6 +41,7 @@ archivos_omitidos = []
 archivos_invalidos = []
 
 try:
+    # Obtiene lista de todos los archivos Excel en la carpeta origen
     archivos_excel = [f for f in os.listdir(carpeta_excels) 
                      if f.lower().endswith(('.xlsx', '.xls', '.xlsm'))]
     
@@ -45,11 +49,13 @@ try:
     
     print(f"Iniciando procesamiento de {total_archivos} archivos Excel...", file=sys.stderr)
     
+    # Identifica carpetas existentes en destino para emparejar por número de ficha
     carpetas_existentes = set()
     for item in os.listdir(carpeta_fichas):
         if os.path.isdir(os.path.join(carpeta_fichas, item)):
             carpetas_existentes.add(item)
     
+    # Procesa cada archivo Excel encontrado
     for i, archivo in enumerate(archivos_excel, 1):
         if i % 100 == 0:  # Log cada 100 archivos
             print(f"Procesados {i}/{total_archivos} archivos Excel...", file=sys.stderr)
@@ -61,11 +67,13 @@ try:
             extension = match.group(2)
             ruta_archivo = os.path.join(carpeta_excels, archivo)
             
+            # Mueve archivo solo si existe carpeta con número de ficha correspondiente
             if numero_ficha in carpetas_existentes:
                 carpeta_destino = os.path.join(carpeta_fichas, numero_ficha)
                 nueva_ruta = os.path.join(carpeta_destino, archivo)
                 
                 try:
+                    # Maneja archivos duplicados agregando sufijo numérico
                     if os.path.exists(nueva_ruta):
                         base_name = os.path.splitext(archivo)[0]
                         counter = 1
@@ -106,6 +114,7 @@ try:
                 "razon": "No coincide con patrón plantilla_<ficha>"
             })
 
+# Manejo de errores generales durante el procesamiento
 except Exception as e:
     resultado = {
         "success": False,
@@ -121,6 +130,7 @@ except Exception as e:
     print(json.dumps(resultado, ensure_ascii=False, indent=2))
     exit()
 
+# Resultado final del proceso con estadísticas detalladas
 resultado = {
     "success": True,
     "mensaje": "Proceso intermedio completado exitosamente",

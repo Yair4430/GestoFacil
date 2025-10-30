@@ -2,9 +2,9 @@ import pdfplumber, re, os, json,sys
 import pandas as pd
 from pathlib import Path
 from openpyxl import load_workbook
-
 from plantilla import generar_plantilla
 
+# Busca todos los PDFs en subcarpetas de la carpeta principal
 def buscar_pdfs_en_carpeta(carpeta_principal):
     pdfs_encontrados = []
     
@@ -20,6 +20,7 @@ def buscar_pdfs_en_carpeta(carpeta_principal):
     
     return pdfs_encontrados
 
+# Extrae datos de documentos usando expresiones regulares del PDF
 def extraer_datos_del_pdf(archivo_pdf):
     tipos, documentos, nombres = [], [], []
     
@@ -59,6 +60,7 @@ def extraer_datos_del_pdf(archivo_pdf):
 
     return tipos, documentos, nombres
 
+# Llena la plantilla Excel con los datos extraídos del PDF
 def llenar_plantilla_con_datos(tipos, documentos, nombres, archivo_salida):
 
     archivo_plantilla_temp = generar_plantilla()
@@ -78,6 +80,7 @@ def llenar_plantilla_con_datos(tipos, documentos, nombres, archivo_salida):
     except:
         pass
 
+# Función principal que procesa todos los PDFs y genera reporte de resultados
 def procesar_carpeta_principal_api(ruta_carpeta):
     resultado = {
         "procesados_exitosos": 0,
@@ -136,6 +139,7 @@ def procesar_carpeta_principal_api(ruta_carpeta):
         resultado["error"] = str(e)
         return resultado
 
+# Interfaz de línea de comandos para interacción con el usuario
 def procesar_carpeta_principal_cli():
     print("=" * 60)
     print("      EXTRACTOR MASIVO DE DATOS PDF A PLANTILLA EXCEL")
@@ -172,6 +176,7 @@ def procesar_carpeta_principal_cli():
     
     input("\nPresiona Enter para salir...")
 
+# Punto de entrada principal - decide entre modo CLI o API
 if __name__ == "__main__":
     if len(sys.argv) == 1:
         procesar_carpeta_principal_cli()

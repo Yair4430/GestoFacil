@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 import subprocess, os, json
 
+# Configuración inicial desde variables de entorno
 load_dotenv()
 
 scripts_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.getenv("SCRIPTS_DIR", "GestoFacil"))
@@ -11,6 +12,7 @@ frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
 host = os.getenv("HOST", "127.0.0.1")
 port = int(os.getenv("PORT", 8000))
 
+# Configuración de la aplicación FastAPI con CORS
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -20,6 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Endpoint para renombrar PDFs extraídos usando datos internos del documento
 @app.post("/renombrarPDF")
 def ejecutar_entrada_extractornombre(ruta: str = Form(...)):
     try:
@@ -34,7 +37,7 @@ def ejecutar_entrada_extractornombre(ruta: str = Form(...)):
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
-
+# Endpoint para organizar PDFs en subcarpetas según número de ficha
 @app.post("/subcarpetasPDF")
 def ejecutar_entrada(ruta: str = Form(...)):
     try:
@@ -49,7 +52,7 @@ def ejecutar_entrada(ruta: str = Form(...)):
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
-
+# Endpoint para mover archivos Excel a carpetas de fichas correspondientes
 @app.post("/organizadorEXCEL")
 def ejecutar_intermedio(rutaExcels: str = Form(...), rutaFichas: str = Form(...)):
     try:
@@ -64,7 +67,7 @@ def ejecutar_intermedio(rutaExcels: str = Form(...), rutaFichas: str = Form(...)
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
-
+# Endpoint para extraer información de aprendices desde PDFs a Excel
 @app.post("/extraerInfAprendiz")
 def ejecutar_extraer_datos(ruta: str = Form(...)):
     try:
@@ -82,7 +85,7 @@ def ejecutar_extraer_datos(ruta: str = Form(...)):
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
-
+# Endpoint para unir múltiples PDFs en cada carpeta en un solo archivo
 @app.post("/unirPDF")
 def ejecutar_intermedio_pdfs(ruta: str = Form(...)):
     try:
@@ -97,7 +100,7 @@ def ejecutar_intermedio_pdfs(ruta: str = Form(...)):
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
-
+# Endpoint para renombrar PDFs finales según estructura de carpetas
 @app.post("/renombrarPDFFinal")
 def ejecutar_salida(ruta: str = Form(...)):
     try:
@@ -112,7 +115,7 @@ def ejecutar_salida(ruta: str = Form(...)):
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
-
+# Inicialización del servidor Uvicorn
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host=host, port=port, reload=True)

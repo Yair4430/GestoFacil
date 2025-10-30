@@ -1,10 +1,12 @@
 import os, re, shutil, sys, json
 
+# Obtiene ruta desde argumento o entrada de usuario
 if len(sys.argv) < 2:
     ruta_origen = input("Ingresa la ruta completa de la carpeta con PDFs: ").strip()
 else:
     ruta_origen = sys.argv[1]
 
+# Valida que la ruta sea una carpeta existente
 if not os.path.isdir(ruta_origen):
     resultado = {
         "success": False,
@@ -16,6 +18,7 @@ if not os.path.isdir(ruta_origen):
     print(json.dumps(resultado))
     exit()
 
+# Patrón para validar nombres: número_ficha + nombre_instructor + .pdf
 patron_valido = re.compile(
     r'^(\d+)\s+([A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+)[ _]?\.pdf$', 
     re.IGNORECASE)
@@ -26,11 +29,13 @@ total_archivos = 0
 carpetas_creadas = set()
 
 try:
+    # Obtiene todos los archivos PDF en la carpeta origen
     todos_archivos = [f for f in os.listdir(ruta_origen) if f.lower().endswith('.pdf')]
     total_archivos = len(todos_archivos)
     
     print(f"Iniciando procesamiento de {total_archivos} archivos...", file=sys.stderr)
     
+    # Procesa cada archivo PDF encontrado
     for i, archivo in enumerate(todos_archivos, 1):
         if i % 100 == 0:  
             print(f"Procesados {i}/{total_archivos} archivos...", file=sys.stderr)
@@ -38,17 +43,20 @@ try:
         ruta_archivo = os.path.join(ruta_origen, archivo)
         match = patron_valido.match(archivo)
         
+        # Si el nombre coincide con el patrón, organiza por ficha
         if match:
             numero_ficha = match.group(1)
             nombre_instructor = match.group(2)
             carpeta_destino = os.path.join(ruta_origen, numero_ficha)
             
+            # Crea carpeta para la ficha si no existe
             if numero_ficha not in carpetas_creadas:
                 os.makedirs(carpeta_destino, exist_ok=True)
                 carpetas_creadas.add(numero_ficha)
             
             destino = os.path.join(carpeta_destino, archivo)
             
+            # Maneja archivos duplicados agregando sufijo numérico
             nombre_base, extension = os.path.splitext(archivo)
             contador = 1
             nombre_final = archivo
@@ -78,6 +86,7 @@ try:
         else:
             archivos_invalidos.append(archivo)
 
+# Manejo de errores durante el procesamiento
 except Exception as e:
     resultado = {
         "success": False,
@@ -89,6 +98,7 @@ except Exception as e:
     print(json.dumps(resultado))
     exit()
 
+# Resultado final con estadísticas de organización
 resultado = {
     "success": True,
     "mensaje": f"Proceso completado exitosamente",

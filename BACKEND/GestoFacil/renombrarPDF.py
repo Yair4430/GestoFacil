@@ -1,5 +1,6 @@
 import pdfplumber,re, os, shutil,sys, json
 
+# Extrae número de ficha y nombre del instructor desde el texto del PDF
 def extraer_datos_pdf(ruta_pdf):
     try:
         texto = ""
@@ -31,7 +32,7 @@ def extraer_datos_pdf(ruta_pdf):
 
     return ficha, instructor
 
-
+# Renombra el archivo PDF usando ficha e instructor, o lo mueve a carpeta No_Renombrados
 def renombrar_pdf(ruta_pdf, carpeta_principal, ficha, instructor):
     try:
         if ficha == "No encontrado" or instructor == "No encontrado":
@@ -60,7 +61,7 @@ def renombrar_pdf(ruta_pdf, carpeta_principal, ficha, instructor):
     except Exception as e:
         return {"archivo": os.path.basename(ruta_pdf), "estado": f"error: {str(e)}"}
 
-
+# Procesa todos los PDFs en una carpeta y organiza resultados
 def procesar_carpeta(carpeta_principal):
     resultado = {"renombrados": [], "no_renombrados": [], "errores": []}
 
@@ -86,6 +87,7 @@ def procesar_carpeta(carpeta_principal):
 
     return resultado
 
+# Punto de entrada principal - procesa carpeta desde argumento de línea de comandos
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(json.dumps({"error": "No se proporcionó la ruta de la carpeta"}))

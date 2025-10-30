@@ -1,10 +1,12 @@
 import os, re, shutil, sys, json
 
+# Obtiene ruta desde argumento o entrada de usuario
 if len(sys.argv) < 2:
     ruta_raiz = input("Ingresa la ruta completa de la carpeta con PDFs: ").strip()
 else:
     ruta_raiz = sys.argv[1]
 
+# Valida que la ruta proporcionada sea una carpeta existente
 if not os.path.isdir(ruta_raiz):
     resultado = {
         "success": False,
@@ -20,13 +22,13 @@ if not os.path.isdir(ruta_raiz):
     print(json.dumps(resultado, ensure_ascii=False, indent=2))
     exit(1)
 
+# Extrae número de ficha del nombre de la carpeta usando expresión regular
 def extraer_numero_ficha(nombre_carpeta):
     
     match = re.match(r'^(\d+)', nombre_carpeta)
     if match:
         return match.group(1)
     return None
-
 
 total = 0
 renombrados = 0
@@ -35,11 +37,13 @@ errores = []
 archivos_procesados = []
 carpetas_eliminadas = 0
 
+# Patrón para detectar archivos repetidos (contienen guiones bajos)
 patron_repetido = re.compile(r'_')
 
 print(f"Iniciando procesamiento en: {ruta_raiz}", file=sys.stderr)
 
 try:
+    # Recorre recursivamente todas las subcarpetas buscando archivos PDF
     todos_pdfs = []
     for carpeta, _, archivos in os.walk(ruta_raiz):
         for archivo in archivos:
@@ -49,6 +53,7 @@ try:
     total = len(todos_pdfs)
     print(f"Encontrados {total} archivos PDF para procesar...", file=sys.stderr)
     
+    # Procesa cada archivo PDF encontrado
     for i, (carpeta, archivo) in enumerate(todos_pdfs, 1):
         if i % 100 == 0:  
             print(f"Procesados {i}/{total} archivos...", file=sys.stderr)
@@ -67,9 +72,11 @@ try:
         
         nombre_archivo = os.path.splitext(archivo)[0].strip()
         
+        # Remueve el número de ficha si ya está al inicio del nombre
         if nombre_archivo.startswith(ficha):
             nombre_archivo = nombre_archivo[len(ficha):].strip()
         
+        # Marca archivos como REPETIDO o OK según contengan guiones bajos
         if patron_repetido.search(nombre_archivo):
             nuevo_nombre = f"{ficha} {nombre_archivo} REPETIDO.pdf"
             tipo_proceso = "REPETIDO"
@@ -81,6 +88,7 @@ try:
         
         ruta_destino = os.path.join(ruta_raiz, nuevo_nombre)
         
+        # Maneja nombres duplicados agregando sufijos numéricos
         contador = 1
         nombre_final = nuevo_nombre
         base_nombre, extension = os.path.splitext(nuevo_nombre)
@@ -106,6 +114,7 @@ try:
                 "error": f"Error al mover: {e}"
             })
 
+# Manejo de errores durante el procesamiento principal
 except Exception as e:
     resultado = {
         "success": False,
@@ -122,6 +131,7 @@ except Exception as e:
     print(json.dumps(resultado, ensure_ascii=False, indent=2))
     exit(1)
 
+# Elimina carpetas vacías después de mover todos los archivos
 try:
     carpetas_a_eliminar = []
     for carpeta_actual in os.listdir(ruta_raiz):
@@ -141,6 +151,7 @@ try:
 except Exception as e:
     print(f"Advertencia al eliminar carpetas: {e}", file=sys.stderr)
 
+# Genera resultado final con estadísticas completas
 resultado = {
     "success": True,
     "mensaje": "Proceso de salida completado exitosamente",

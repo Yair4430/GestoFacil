@@ -2,10 +2,12 @@ import os, glob, re, json, tempfile, time, sys
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter
 from pathlib import Path
 
+# Verifica si el nombre del archivo sigue el formato: número + nombre instructor
 def tiene_formato_instructor(nombre_archivo):
     patron = r'^\d{6,} [A-ZÁÉÍÓÚÜÑ][A-ZÁÉÍÓÚÜÑ\s\.]+\.pdf$'
     return re.match(patron, nombre_archivo, re.IGNORECASE) is not None
 
+# Detecta si el PDF es un certificado de cédula basado en patrones de texto
 def es_certificado_cedula(archivo_path):
     try:
         with open(archivo_path, 'rb') as f:
@@ -29,6 +31,7 @@ def es_certificado_cedula(archivo_path):
     except:
         return False
 
+# Determina si la segunda página del PDF debe ser eliminada (páginas vacías o de numeración)
 def necesita_eliminar_segunda_pagina(archivo_path):
     try:
         with open(archivo_path, 'rb') as f:
@@ -52,6 +55,7 @@ def necesita_eliminar_segunda_pagina(archivo_path):
         print(f"    ❌ Error al verificar segunda página {os.path.basename(archivo_path)}: {e}")
         return False
 
+# Elimina la segunda página de PDFs de cédula que tienen páginas vacías
 def procesar_pdf_eliminar_segunda_pagina(archivo_path):
     try:
         with open(archivo_path, 'rb') as f:
@@ -73,6 +77,7 @@ def procesar_pdf_eliminar_segunda_pagina(archivo_path):
         print(f"    ❌ Error al procesar {os.path.basename(archivo_path)}: {e}")
         return archivo_path
 
+# Valida que un archivo PDF sea legible y tenga páginas
 def es_pdf_valido(archivo_path):
     try:
         with open(archivo_path, 'rb') as f:
@@ -81,6 +86,7 @@ def es_pdf_valido(archivo_path):
     except:
         return False
 
+# Ordena archivos: primero los de instructor, luego los normales
 def ordenar_archivos_pdf(archivos_pdf):
     archivos_instructor = []
     archivos_normales = []
@@ -97,6 +103,7 @@ def ordenar_archivos_pdf(archivos_pdf):
     
     return archivos_instructor + archivos_normales
 
+# Encuentra el PDF principal (con formato de instructor) para nombrar el archivo final
 def obtener_pdf_principal(carpeta):
     patron_pdf = os.path.join(carpeta, "*.pdf")
     archivos_pdf = glob.glob(patron_pdf)
@@ -107,6 +114,7 @@ def obtener_pdf_principal(carpeta):
             return archivo
     return None
 
+# Elimina archivos PDF originales después de la unión, manteniendo solo el resultado final
 def limpiar_archivos_originales(carpeta, archivos_a_mantener):
     try:
         patron_pdf = os.path.join(carpeta, "*.pdf")
@@ -139,6 +147,7 @@ def limpiar_archivos_originales(carpeta, archivos_a_mantener):
     except Exception as e:
         return 0, 1
 
+# Función principal: une todos los PDFs de una carpeta en un solo archivo
 def unir_pdfs_en_carpeta(carpeta):
     archivos_temporales = []
     resultados = {
@@ -255,6 +264,7 @@ def unir_pdfs_en_carpeta(carpeta):
     
     return resultados
 
+# Procesa todas las subcarpetas de una ruta principal uniendo sus PDFs
 def unir_pdfs_en_carpetas(ruta_principal):
     resultados_totales = {
         'carpetas_procesadas': 0,
@@ -296,6 +306,7 @@ def unir_pdfs_en_carpetas(ruta_principal):
             'error': f"Error inesperado: {str(e)}"
         }
 
+# Punto de entrada principal - procesa carpeta desde argumento de línea de comandos
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print(json.dumps({"error": "Se requiere la ruta de la carpeta principal como parámetro"}))
