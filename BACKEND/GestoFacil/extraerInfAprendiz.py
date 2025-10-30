@@ -150,29 +150,29 @@ def procesar_carpeta_principal_cli():
         ruta_carpeta = ruta_carpeta.strip('"\'')
         
         if not os.path.exists(ruta_carpeta) or not os.path.isdir(ruta_carpeta):
-            print("❌ Error: La carpeta no existe o la ruta es incorrecta.")
+            print("Error: La carpeta no existe o la ruta es incorrecta.")
             return
         
         resultado = procesar_carpeta_principal_api(ruta_carpeta)
         
-        print(f"\n📋 Total de PDFs encontrados: {resultado['total_pdfs_encontrados']}")
+        print(f"\nTotal de PDFs encontrados: {resultado['total_pdfs_encontrados']}")
         
         for archivo in resultado["archivos_procesados"]:
-            print(f"✅ {archivo['pdf']} -> {archivo['excel_generado']} ({archivo['registros_procesados']} registros)")
+            print(f"{archivo['pdf']} -> {archivo['excel_generado']} ({archivo['registros_procesados']} registros)")
         
         for error in resultado["errores"]:
             print(f"❌ {error['pdf']}: {error['error']}")
         
-        print(f"\n📊 RESUMEN:")
-        print(f"✅ PDFs procesados exitosamente: {resultado['procesados_exitosos']}")
-        print(f"❌ PDFs con errores: {resultado['procesados_con_error']}")
+        print(f"\nRESUMEN:")
+        print(f"PDFs procesados exitosamente: {resultado['procesados_exitosos']}")
+        print(f"PDFs con errores: {resultado['procesados_con_error']}")
         
         if resultado["procesados_exitosos"] > 0:
-            print(f"\n📝 Los archivos Excel se guardaron en sus respectivas subcarpetas")
+            print(f"\nLos archivos Excel se guardaron en sus respectivas subcarpetas")
             print("   con el nombre: plantilla.xlsx")
         
     except Exception as e:
-        print(f"\n❌ Error durante el proceso: {str(e)}")
+        print(f"\nError durante el proceso: {str(e)}")
     
     input("\nPresiona Enter para salir...")
 

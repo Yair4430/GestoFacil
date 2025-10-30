@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./organizadorEXCEL.css"
 
 export default function OrganizadorEXCEL() {
   const [rutaExcels, setRutaExcels] = useState("");
@@ -44,26 +45,29 @@ export default function OrganizadorEXCEL() {
         <h2 className="doc-card-title">📊 Organizador de Excel a Subcarpetas</h2>
 
         <form onSubmit={handleSubmit}>
+
           <div className="doc-form-group">
             <input
               type="text"
               className="doc-form-input"
-              placeholder="Ingrese la ruta de la carpeta con los Excels"
-              value={rutaExcels}
-              onChange={(e) => setRutaExcels(e.target.value)}
-              required
-            />
-          </div>
-          <div className="doc-form-group">
-            <input
-              type="text"
-              className="doc-form-input"
-              placeholder="Ingrese la ruta de la carpeta con las subcarpetas"
+              placeholder="  Ingrese la ruta de la carpeta con las subcarpetas"
               value={rutaFichas}
               onChange={(e) => setRutaFichas(e.target.value)}
               required
             />
           </div>
+
+          <div className="doc-form-group">
+            <input
+              type="text"
+              className="doc-form-input"
+              placeholder="  Ingrese la ruta de la carpeta con los Excels"
+              value={rutaExcels}
+              onChange={(e) => setRutaExcels(e.target.value)}
+              required
+            />
+          </div>
+          
           <button 
             type="submit" 
             className="doc-btn doc-btn-intermedio-excel"

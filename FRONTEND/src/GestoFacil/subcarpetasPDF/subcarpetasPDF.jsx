@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./subcarpetasPDF.css"
 
 export default function SubcarpetasPDF() {
   const [ruta, setRuta] = useState("");

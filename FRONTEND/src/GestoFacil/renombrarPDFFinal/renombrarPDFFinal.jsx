@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./renombrarPDFFinal.css"
 
 const RenombrarPDFFinal = () => {
   const [ruta, setRuta] = useState("");
@@ -38,31 +39,34 @@ const RenombrarPDFFinal = () => {
   return (
     <div className="doc-container">
       <div className="doc-card" data-component="salida">
-        <h2 className="doc-card-title">📤 Renombrar PDFs, Sacarlos y borralos de las Subcarpetas</h2>
+        <h2 className="doc-card-title">📤 Renombrar PDFs, Sacarlos y borrar Subcarpetas</h2>
         
-        <form onSubmit={manejarSubmit}>
-          <div className="doc-form-group">
-            <input
-              type="text"
-              className="doc-form-input"
-              placeholder="Ingrese la ruta de la carpeta Principal"
-              value={ruta}
-              onChange={(e) => setRuta(e.target.value)}
-              required
-            />
-          </div>
-          <button 
-            type="submit" 
-            className="doc-btn doc-btn-salida"
-            disabled={cargando}
-          >
-            {cargando ? (
-              <>
-                <span className="doc-loading"></span> Procesando...
-              </>
-            ) : "Ejecutar"}
-          </button>
-        </form>
+          <form onSubmit={manejarSubmit}>
+            <div className="doc-input-button-group">
+              <input
+                type="text"
+                className="doc-form-input"
+                placeholder="Ingrese la ruta de la carpeta Principal"
+                value={ruta}
+                onChange={(e) => setRuta(e.target.value)}
+                required
+              />
+              <button 
+                type="submit" 
+                className="doc-btn doc-btn-salida"
+                disabled={cargando}
+              >
+                {cargando ? (
+                  <>
+                    <span className="doc-loading"></span> Procesando...
+                  </>
+                ) : (
+                  "Ejecutar"
+                )}
+              </button>
+            </div>
+          </form>
+
 
         {error && <div className="doc-error-message">{error}</div>}
 

@@ -73,17 +73,22 @@ def ejecutar_extraer_datos(ruta: str = Form(...)):
     try:
         result = subprocess.run(
             ["python", os.path.join(scripts_dir, "extraerInfAprendiz.py"), ruta],
-            check=True, capture_output=True, text=True, encoding='utf-8'
+            check=True, capture_output=True
         )
+
+        # decodifica ignorando errores
+        stdout_text = result.stdout.decode("utf-8", errors="ignore")
+
         try:
-            return json.loads(result.stdout)
+            return json.loads(stdout_text)
         except json.JSONDecodeError:
             return {
-                "message": result.stdout or "ExtraerInfAprendiz ejecutado correctamente",
-                "output": result.stdout
+                "message": stdout_text or "ExtraerInfAprendiz ejecutado correctamente",
+                "output": stdout_text
             }
+
     except subprocess.CalledProcessError as e:
-        return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
+        return JSONResponse(status_code=500, content={"error": e.stderr.decode('utf-8', errors='ignore')})
 
 # Endpoint para unir múltiples PDFs en cada carpeta en un solo archivo
 @app.post("/unirPDF")

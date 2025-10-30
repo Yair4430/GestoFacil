@@ -1,0 +1,199 @@
+/* === ESTILOS AISLADOS DEL COMPONENTE === */
+.extraer-aprendiz-wrapper {
+  width: 100%;
+}
+
+/* === CONTENEDOR PRINCIPAL === */
+.extraer-aprendiz-wrapper .doc-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding: 25px;
+  background: transparent;
+}
+
+/* === TARJETA === */
+.extraer-aprendiz-wrapper .doc-card {
+  width: 95%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.extraer-aprendiz-wrapper .doc-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* === TÍTULO === */
+.extraer-aprendiz-wrapper .doc-card-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #5b21b6;
+  margin-bottom: 25px;
+  border-left: 6px solid #8b5cf6;
+  padding-left: 14px;
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* === FORMULARIO === */
+.extraer-aprendiz-wrapper form {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.extraer-aprendiz-wrapper .doc-input-button-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.extraer-aprendiz-wrapper .doc-form-input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #cbd5e1;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: #f9fafb;
+}
+
+.extraer-aprendiz-wrapper .doc-form-input:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+/* === BOTÓN === */
+.extraer-aprendiz-wrapper .doc-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.12);
+}
+
+.extraer-aprendiz-wrapper .doc-btn-extraer-aprendiz {
+  background-image: linear-gradient(45deg, #8b5cf6, #a78bfa);
+}
+
+.extraer-aprendiz-wrapper .doc-btn-extraer-aprendiz:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(139, 92, 246, 0.25);
+  background-position: right center;
+}
+
+/* === LOADER === */
+.extraer-aprendiz-wrapper .doc-loading {
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #8b5cf6;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-right: 8px;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* === MENSAJES === */
+.extraer-aprendiz-wrapper .doc-error-message {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.extraer-aprendiz-wrapper .doc-success-message {
+  background: #ede9fe;
+  color: #5b21b6;
+  border: 1px solid #ddd6fe;
+  padding: 10px 16px;
+  border-radius: 10px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+/* === RESULTADOS === */
+.extraer-aprendiz-wrapper .doc-resultado {
+  margin-top: 20px;
+  border-top: 2px solid #e2e8f0;
+  padding-top: 20px;
+}
+
+/* === ESTADÍSTICAS === */
+.extraer-aprendiz-wrapper .doc-stats-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+
+.extraer-aprendiz-wrapper .doc-stat-item {
+  flex: 1;
+  min-width: 150px;
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 16px 12px;
+  text-align: center;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+}
+
+.extraer-aprendiz-wrapper .doc-stat-item:hover {
+  background: #f3f0ff;
+  transform: translateY(-2px);
+}
+
+.extraer-aprendiz-wrapper .doc-stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #7c3aed;
+}
+
+/* === LISTAS === */
+.extraer-aprendiz-wrapper .doc-file-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 12px;
+}
+
+.extraer-aprendiz-wrapper .doc-file-item {
+  background: #f9fafb;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  transition: all 0.25s ease;
+}
+
+.extraer-aprendiz-wrapper .doc-file-item:hover {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+}
+
+.extraer-aprendiz-wrapper .doc-error-item {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}

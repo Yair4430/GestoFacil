@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./renombrarPDF.css"
 
 export default function RenombrarPDF () {
   const [ruta, setRuta] = useState("");

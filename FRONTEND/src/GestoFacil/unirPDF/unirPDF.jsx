@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./unirPDF.css"
 
 export default function UnirPDF() {
   const [ruta, setRuta] = useState("");
@@ -41,29 +42,30 @@ export default function UnirPDF() {
       <div className="doc-card" data-component="intermedio-pdf">
         <h2 className="doc-card-title">📑 Unir PDFs de cada Subcarpeta Jucio + Certificados</h2>
 
-        <form onSubmit={handleSubmit}>
-          <div className="doc-form-group">
-            <input
-              type="text"
-              className="doc-form-input"
-              placeholder="Ingrese la ruta de la carpeta principal con PDFS"
-              value={ruta}
-              onChange={(e) => setRuta(e.target.value)}
-              required
-            />
-          </div>
-          <button 
-            type="submit" 
-            className="doc-btn doc-btn-intermedio-pdf"
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <span className="doc-loading"></span> Procesando...
-              </>
-            ) : "Ejecutar"}
-          </button>
-        </form>
+          <form onSubmit={handleSubmit}>
+            <div className="doc-form-group">
+              <input
+                type="text"
+                className="doc-form-input"
+                placeholder="Ingrese la ruta de la carpeta principal con PDFS"
+                value={ruta}
+                onChange={(e) => setRuta(e.target.value)}
+                required
+              />
+
+              <button 
+                type="submit" 
+                className="doc-btn doc-btn-intermedio-pdf"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="doc-loading"></span> Procesando...
+                  </>
+                ) : "Ejecutar"}
+              </button>
+            </div>
+          </form>
 
         {error && <div className="doc-error-message">{error}</div>}
 
