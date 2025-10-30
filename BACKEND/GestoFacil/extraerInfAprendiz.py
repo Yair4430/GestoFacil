@@ -161,7 +161,7 @@ def procesar_carpeta_principal_cli():
             print(f"{archivo['pdf']} -> {archivo['excel_generado']} ({archivo['registros_procesados']} registros)")
         
         for error in resultado["errores"]:
-            print(f"❌ {error['pdf']}: {error['error']}")
+            print(f"{error['pdf']}: {error['error']}")
         
         print(f"\nRESUMEN:")
         print(f"PDFs procesados exitosamente: {resultado['procesados_exitosos']}")

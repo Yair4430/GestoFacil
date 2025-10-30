@@ -10,6 +10,15 @@ import "./central.css";
 function Central() {
   const [activeTab, setActiveTab] = useState("RenombrarPDF");
 
+  const colorMap = {
+    RenombrarPDF: "blue",
+    SubcarpetasPDF: "green",
+    OrganizadorEXCEL: "orange",
+    ExtraerInfAprendiz: "purple",
+    UnirPDF: "red",
+    RenombrarPDFFinal: "cyan",
+  };
+
   const renderComponent = () => {
     switch (activeTab) {
       case "RenombrarPDF": return <RenombrarPDF />;
@@ -24,11 +33,15 @@ function Central() {
 
   return (
     <div className="central-wrapper">
-      <header className="header-premium">
+      {/* Header con clase dinámica */}
+      <header className={`header-premium theme-${colorMap[activeTab]}`}>
         <div className="brand">
           <div className="brand-icon">⚙️</div>
           <div className="brand-text">
-            <h1>Gesti<span>Facil</span></h1>
+            <h1>
+              <span className="gesti">Gesti</span>
+              <span className="facil">Facil</span>
+            </h1>
             <p>Automatiza y simplifica tu flujo de documentos PDF y Excel</p>
           </div>
         </div>

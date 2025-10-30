@@ -55,12 +55,18 @@
   font-size: 2.4rem;
   font-weight: 800;
   letter-spacing: -1px;
-  color: #1e3a8a;
   margin: 0;
   text-align: left;
 }
 
-.brand-text h1 span {
+/* 🔹 "Gesti" en tonalidad oscura del mismo color */
+.brand-text .gesti {
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+}
+
+/* 🔹 "Facil" en gradiente que cambia */
+.brand-text .facil {
   background: linear-gradient(90deg, #3b82f6, #06b6d4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -144,9 +150,9 @@
   padding: 30px;
   min-height: 450px;
   transition: all 0.3s ease;
-  background: transparent;  /* 🔹 sin fondo visible */
-  box-shadow: none;         /* 🔹 sin sombra */
-  border: none;             /* 🔹 sin bordes */
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
 
 /* === PIE DE PÁGINA === */
@@ -163,4 +169,114 @@
 .footer span {
   color: #0284c7;
   font-weight: 600;
+}
+
+/* === TEMAS DE COLOR DEL HEADER === */
+
+/* === Azul === */
+.theme-blue .brand-icon {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-blue .brand-text .gesti {
+  color: #1e40af; /* Azul oscuro */
+}
+.theme-blue .brand-text .facil {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-blue .glow-line {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+}
+
+/* === Verde === */
+.theme-green .brand-icon {
+  background: linear-gradient(135deg, #059669, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-green .brand-text .gesti {
+  color: #047857; /* Verde oscuro */
+}
+.theme-green .brand-text .facil {
+  background: linear-gradient(90deg, #059669, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-green .glow-line {
+  background: linear-gradient(90deg, #059669, #34d399);
+}
+
+/* === Naranja === */
+.theme-orange .brand-icon {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-orange .brand-text .gesti {
+  color: #b45309; /* Naranja oscuro */
+}
+.theme-orange .brand-text .facil {
+  background: linear-gradient(90deg, #d97706, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-orange .glow-line {
+  background: linear-gradient(90deg, #d97706, #f59e0b);
+}
+
+/* === Morado === */
+.theme-purple .brand-icon {
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-purple .brand-text .gesti {
+  color: #6d28d9; /* Morado oscuro */
+}
+.theme-purple .brand-text .facil {
+  background: linear-gradient(90deg, #7c3aed, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-purple .glow-line {
+  background: linear-gradient(90deg, #7c3aed, #8b5cf6);
+}
+
+/* === Rojo === */
+.theme-red .brand-icon {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-red .brand-text .gesti {
+  color: #b91c1c; /* Rojo oscuro */
+}
+.theme-red .brand-text .facil {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-red .glow-line {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+}
+
+/* === Cyan === */
+.theme-cyan .brand-icon {
+  background: linear-gradient(135deg, #0891b2, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-cyan .brand-text .gesti {
+  color: #0e7490; /* Cyan oscuro */
+}
+.theme-cyan .brand-text .facil {
+  background: linear-gradient(90deg, #0891b2, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.theme-cyan .glow-line {
+  background: linear-gradient(90deg, #0891b2, #06b6d4);
 }
