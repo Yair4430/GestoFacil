@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import RenombrarPDF from "./Componentes/renombrarPDF"
-import SubcarpetasPDF from "./Componentes/subcarpetasPDF"
-import OrganizadorEXCEL from "./Componentes/organizadorEXCEL"
-import ExtraerInfAprendiz from "./Componentes/extraerInfAprendiz"
-import UnirPDF from "./Componentes/unirPDF"
-import RenombrarPDFFinal from "./Componentes/renombrarPDFFinal"
-import "./App.css";
+import RenombrarPDF from "./GestoFacil/renombrarPDF/renombrarPDF"
+import SubcarpetasPDF from "./GestoFacil/subcarpetasPDF/subcarpetasPDF"
+import OrganizadorEXCEL from "./GestoFacil/organizadorEXCEL/organizadorEXCEL"
+import ExtraerInfAprendiz from "./GestoFacil/extraerInfAprendiz/extraerInfAprendiz"
+import UnirPDF from "./GestoFacil/unirPDF/unirPDF"
+import RenombrarPDFFinal from "./GestoFacil/renombrarPDFFinal/renombrarPDFFinal"
 
 function App() {
   const [activeTab, setActiveTab] = useState("RenombrarPDF");

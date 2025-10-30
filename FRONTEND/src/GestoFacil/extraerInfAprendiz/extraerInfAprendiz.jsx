@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import "./styles.css";
 
 export default function ExtraerInfAprendiz() {
   const [ruta, setRuta] = useState("");
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +18,7 @@ export default function ExtraerInfAprendiz() {
       const formData = new FormData();
       formData.append("ruta", ruta);
 
-      const res = await fetch("http://127.0.0.1:8000/extraerInfAprendiz", {
+      const res = await fetch(`${API_BASE_URL}/extraerInfAprendiz`, {
         method: "POST",
         body: formData,
       });
@@ -39,7 +40,7 @@ export default function ExtraerInfAprendiz() {
   return (
     <div className="doc-container">
       <div className="doc-card" data-component="extraer-aprendiz">
-        <h2 className="doc-card-title">📘 Extraer Información de Aprendices del jucio a Excel</h2>
+        <h2 className="doc-card-title">👩‍🎓 Extraer Información de Aprendices del jucio a Excel</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="doc-input-button-group">

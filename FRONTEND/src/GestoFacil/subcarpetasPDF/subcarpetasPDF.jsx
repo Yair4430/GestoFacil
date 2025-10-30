@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import "./styles.css"
 
 export default function SubcarpetasPDF() {
   const [ruta, setRuta] = useState("");
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Usando la variable de entorno
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +19,7 @@ export default function SubcarpetasPDF() {
       const formData = new FormData();
       formData.append("ruta", ruta);
 
-      const res = await fetch("http://127.0.0.1:8000/subcarpetasPDF", {
+      const res = await fetch(`${API_BASE_URL}/subcarpetasPDF`, {
         method: "POST",
         body: formData,
       });

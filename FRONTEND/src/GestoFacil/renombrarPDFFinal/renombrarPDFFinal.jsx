@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./styles.css"
 
 const RenombrarPDFFinal = () => {
   const [ruta, setRuta] = useState("");
@@ -7,6 +6,9 @@ const RenombrarPDFFinal = () => {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
 
+  // Usando la variable de entorno
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  
   const manejarSubmit = async (e) => {
     e.preventDefault();
     setCargando(true);
@@ -17,14 +19,14 @@ const RenombrarPDFFinal = () => {
       const formData = new FormData();
       formData.append("ruta", ruta);
 
-      const response = await fetch("http://127.0.0.1:8000/renombrarPDFFinal", {
+      const res = await fetch(`${API_BASE_URL}/renombrarPDFFinal`, {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Error en la petición al servidor");
+      if (!res.ok) throw new Error("Error en la petición al servidor");
 
-      const data = await response.json();
+      const data = await res.json();
       setResultado(data);
     } catch (err) {
       setError("❌ " + err.message);
