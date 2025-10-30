@@ -1,9 +1,4 @@
-import os
-import re
-import shutil
-import sys
-import json
-import time
+import os, re, shutil, sys, json
 
 if len(sys.argv) < 3:
     resultado = {
@@ -36,15 +31,12 @@ if not os.path.isdir(carpeta_excels) or not os.path.isdir(carpeta_fichas):
     print(json.dumps(resultado, ensure_ascii=False, indent=2))
     exit()
 
-# Regex precompilada para mejor rendimiento
 patron_excel = re.compile(r'^plantilla_(\d+)\.(xlsx|xls|xlsm)$', re.IGNORECASE)
 
-# Listas para almacenar resultados
 archivos_movidos = []
 archivos_omitidos = []
 archivos_invalidos = []
 
-# Obtener todos los archivos Excel de una sola vez (más eficiente)
 try:
     archivos_excel = [f for f in os.listdir(carpeta_excels) 
                      if f.lower().endswith(('.xlsx', '.xls', '.xlsm'))]
@@ -53,7 +45,6 @@ try:
     
     print(f"Iniciando procesamiento de {total_archivos} archivos Excel...", file=sys.stderr)
     
-    # Pre-cache de carpetas existentes para evitar múltiples verificaciones
     carpetas_existentes = set()
     for item in os.listdir(carpeta_fichas):
         if os.path.isdir(os.path.join(carpeta_fichas, item)):
@@ -70,13 +61,11 @@ try:
             extension = match.group(2)
             ruta_archivo = os.path.join(carpeta_excels, archivo)
             
-            # Verificar si la carpeta destino existe (usando cache)
             if numero_ficha in carpetas_existentes:
                 carpeta_destino = os.path.join(carpeta_fichas, numero_ficha)
                 nueva_ruta = os.path.join(carpeta_destino, archivo)
                 
                 try:
-                    # Verificar si ya existe un archivo con el mismo nombre
                     if os.path.exists(nueva_ruta):
                         base_name = os.path.splitext(archivo)[0]
                         counter = 1
@@ -132,7 +121,6 @@ except Exception as e:
     print(json.dumps(resultado, ensure_ascii=False, indent=2))
     exit()
 
-# ✅ Retornar resultado estructurado
 resultado = {
     "success": True,
     "mensaje": "Proceso intermedio completado exitosamente",

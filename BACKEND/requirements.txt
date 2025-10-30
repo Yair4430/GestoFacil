@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-dotenv
+pdfplumber
+PyPDF2
+pandas
+openpyxl
+et-xmlfile
+numpy

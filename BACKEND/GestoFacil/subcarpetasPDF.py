@@ -1,17 +1,10 @@
-import os
-import re
-import shutil
-import sys
-import json
-import time
+import os, re, shutil, sys, json
 
-# ✅ Solicita la ruta si no se proporciona como argumento
 if len(sys.argv) < 2:
     ruta_origen = input("Ingresa la ruta completa de la carpeta con PDFs: ").strip()
 else:
     ruta_origen = sys.argv[1]
 
-# Validar existencia de la carpeta
 if not os.path.isdir(ruta_origen):
     resultado = {
         "success": False,
@@ -23,18 +16,15 @@ if not os.path.isdir(ruta_origen):
     print(json.dumps(resultado))
     exit()
 
-# Regex optimizada para validar nombres como "12345 NOMBRE APELLIDO.pdf"
 patron_valido = re.compile(
     r'^(\d+)\s+([A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)+)[ _]?\.pdf$', 
     re.IGNORECASE)
 
-# Listas para almacenar resultados
 archivos_movidos = []
 archivos_invalidos = []
 total_archivos = 0
 carpetas_creadas = set()
 
-# Obtener todos los PDFs de una sola vez (más eficiente)
 try:
     todos_archivos = [f for f in os.listdir(ruta_origen) if f.lower().endswith('.pdf')]
     total_archivos = len(todos_archivos)
@@ -42,7 +32,7 @@ try:
     print(f"Iniciando procesamiento de {total_archivos} archivos...", file=sys.stderr)
     
     for i, archivo in enumerate(todos_archivos, 1):
-        if i % 100 == 0:  # Log cada 100 archivos
+        if i % 100 == 0:  
             print(f"Procesados {i}/{total_archivos} archivos...", file=sys.stderr)
             
         ruta_archivo = os.path.join(ruta_origen, archivo)
@@ -53,7 +43,6 @@ try:
             nombre_instructor = match.group(2)
             carpeta_destino = os.path.join(ruta_origen, numero_ficha)
             
-            # Crear carpeta solo si no existe
             if numero_ficha not in carpetas_creadas:
                 os.makedirs(carpeta_destino, exist_ok=True)
                 carpetas_creadas.add(numero_ficha)
@@ -65,7 +54,6 @@ try:
             nombre_final = archivo
             fue_renombrado = False
             
-            # Verificar si el archivo ya existe en destino
             if os.path.exists(destino):
                 while os.path.exists(destino):
                     nombre_final = f"{nombre_base} ({contador}){extension}"
@@ -101,7 +89,6 @@ except Exception as e:
     print(json.dumps(resultado))
     exit()
 
-# ✅ Retornar resultado estructurado
 resultado = {
     "success": True,
     "mensaje": f"Proceso completado exitosamente",

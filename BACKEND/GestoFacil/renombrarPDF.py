@@ -1,9 +1,4 @@
-import pdfplumber
-import re
-import os
-import shutil
-import sys
-import json
+import pdfplumber,re, os, shutil,sys, json
 
 def extraer_datos_pdf(ruta_pdf):
     try:
@@ -90,7 +85,6 @@ def procesar_carpeta(carpeta_principal):
             resultado["errores"].append(resultado_archivo)
 
     return resultado
-
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
