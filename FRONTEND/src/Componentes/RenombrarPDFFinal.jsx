@@ -17,7 +17,7 @@ const RenombrarPDFFinal = () => {
       const formData = new FormData();
       formData.append("ruta", ruta);
 
-      const response = await fetch("http://127.0.0.1:8000/salida", {
+      const response = await fetch("http://127.0.0.1:8000/renombrarPDFFinal", {
         method: "POST",
         body: formData,
       });

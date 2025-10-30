@@ -19,7 +19,7 @@ export default function OrganizadorEXCEL() {
       formData.append("rutaExcels", rutaExcels);
       formData.append("rutaFichas", rutaFichas);
 
-      const res = await fetch("http://127.0.0.1:8000/intermedio", {
+      const res = await fetch("http://127.0.0.1:8000/organizadorEXCEL", {
         method: "POST",
         body: formData,
       });

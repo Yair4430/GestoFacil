@@ -17,7 +17,7 @@ export default function UnirPDF() {
       const formData = new FormData();
       formData.append("ruta", ruta);
 
-      const res = await fetch("http://127.0.0.1:8000/intermedio-pdfs", {
+      const res = await fetch("http://127.0.0.1:8000/unirPDF", {
         method: "POST",
         body: formData,
       });

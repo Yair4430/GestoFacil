@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SubcarpetasPDF from "./Componentes/SubcarpetasPDF";
-import OrganizadorEXCEL from "./Componentes/OrganizadorEXCEL";
+import OrganizadorEXCEL from "./Componentes/organizadorEXCEL";
 import ExtraerInfAprendiz from "./Componentes/ExtraerInfAprendiz"; // 👈 nuevo componente
 import UnirPDF from "./Componentes/UnirPDF";
 import RenombrarPDFFinal from "./Componentes/RenombrarPDFFinal";

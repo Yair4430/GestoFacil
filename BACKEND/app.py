@@ -17,11 +17,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/entrada-extractornombre")
+@app.post("/renombrarPDF")
 def ejecutar_entrada_extractornombre(ruta: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "RenombrarPDF.py"), ruta],
+            ["python", os.path.join(base_dir, "renombrarPDF.py"), ruta],
             check=True,
             capture_output=True,
             text=True
@@ -31,17 +31,17 @@ def ejecutar_entrada_extractornombre(ruta: str = Form(...)):
             resultado_json = json.loads(result.stdout)
             return resultado_json
         except json.JSONDecodeError:
-            return {"message": result.stdout or "Entrada_ExtraerNombre ejecutado correctamente"}
+            return {"message": result.stdout or "entrada_ExtraerNombre ejecutado correctamente"}
 
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
 
-@app.post("/entrada")
+@app.post("/subcarpetasPDF")
 def ejecutar_entrada(ruta: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "SubcarpetasPDF.py"), ruta],
+            ["python", os.path.join(base_dir, "subcarpetasPDF.py"), ruta],
             check=True,
             capture_output=True,
             text=True
@@ -56,11 +56,11 @@ def ejecutar_entrada(ruta: str = Form(...)):
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
-@app.post("/intermedio")
+@app.post("/organizadorEXCEL")
 def ejecutar_intermedio(rutaExcels: str = Form(...), rutaFichas: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "OrganizadorEXCEL.py"), rutaExcels, rutaFichas], 
+            ["python", os.path.join(base_dir, "organizadorEXCEL.py"), rutaExcels, rutaFichas], 
             check=True,
             capture_output=True,
             text=True
@@ -75,11 +75,11 @@ def ejecutar_intermedio(rutaExcels: str = Form(...), rutaFichas: str = Form(...)
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
-@app.post("/extraer-datos-aprendices")
+@app.post("/extraerInfAprendiz")
 def ejecutar_extraer_datos(ruta: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "ExtraerInfAprendiz.py"), ruta],
+            ["python", os.path.join(base_dir, "extraerInfAprendiz.py"), ruta],
             check=True,
             capture_output=True,
             text=True,
@@ -101,11 +101,11 @@ def ejecutar_extraer_datos(ruta: str = Form(...)):
             content={"error": e.stderr or str(e)}
         )
 
-@app.post("/intermedio-pdfs")
+@app.post("/unirPDF")
 def ejecutar_intermedio_pdfs(ruta: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "UnirPDF.py"), ruta],
+            ["python", os.path.join(base_dir, "unirPDF.py"), ruta],
             check=True,
             capture_output=True,
             text=True
@@ -120,11 +120,11 @@ def ejecutar_intermedio_pdfs(ruta: str = Form(...)):
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr or str(e)})
 
-@app.post("/salida")
+@app.post("/renombrarPDFFinal")
 def ejecutar_salida(ruta: str = Form(...)):
     try:
         result = subprocess.run(
-            ["python", os.path.join(base_dir, "RenombrarPDFFinal.py"), ruta],
+            ["python", os.path.join(base_dir, "renombrarPDFFinal.py"), ruta],
             check=True,
             capture_output=True,
             text=True

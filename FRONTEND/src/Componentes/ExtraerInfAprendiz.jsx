@@ -17,7 +17,7 @@ export default function ExtraerInfAprendiz() {
       const formData = new FormData();
       formData.append("ruta", ruta);
 
-      const res = await fetch("http://127.0.0.1:8000/extraer-datos-aprendices", {
+      const res = await fetch("http://127.0.0.1:8000/extraerInfAprendiz", {
         method: "POST",
         body: formData,
       });

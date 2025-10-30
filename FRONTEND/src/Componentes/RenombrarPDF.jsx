@@ -17,7 +17,7 @@ export default function RenombrarPDF () {
       const formData = new FormData();
       formData.append("ruta", ruta);
 
-      const res = await fetch("http://127.0.0.1:8000/entrada-extractornombre", {
+      const res = await fetch("http://127.0.0.1:8000/renombrarPDF", {
         method: "POST",
         body: formData,
       });
