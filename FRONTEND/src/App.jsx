@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import SubcarpetasPDF from "./Componentes/SubcarpetasPDF";
-import OrganizadorEXCEL from "./Componentes/organizadorEXCEL";
-import ExtraerInfAprendiz from "./Componentes/ExtraerInfAprendiz"; // 👈 nuevo componente
-import UnirPDF from "./Componentes/UnirPDF";
-import RenombrarPDFFinal from "./Componentes/RenombrarPDFFinal";
-import RenombrarPDF from "./Componentes/RenombrarPDF";
+import RenombrarPDF from "./Componentes/renombrarPDF"
+import SubcarpetasPDF from "./Componentes/subcarpetasPDF"
+import OrganizadorEXCEL from "./Componentes/organizadorEXCEL"
+import ExtraerInfAprendiz from "./Componentes/extraerInfAprendiz"
+import UnirPDF from "./Componentes/unirPDF"
+import RenombrarPDFFinal from "./Componentes/renombrarPDFFinal"
 import "./App.css";
 
 function App() {
-  const [activeTab, setActiveTab] = useState("entrada-extractornombre");
+  const [activeTab, setActiveTab] = useState("RenombrarPDF");
 
   return (
     <div className="app-container">
@@ -19,56 +19,56 @@ function App() {
 
       <nav className="tabs-container">
         <button 
-          className={`tab-button ${activeTab === "entrada-extractornombre" ? "active entrada-extractornombre" : "entrada-extractornombre"}`} 
-          onClick={() => setActiveTab("entrada-extractornombre")}
+          className={`tab-button ${activeTab === "RenombrarPDF" ? "active RenombrarPDF" : "RenombrarPDF"}`} 
+          onClick={() => setActiveTab("RenombrarPDF")}
         >
           🧾 Renombrar PDFs
         </button>
 
         <button 
-          className={`tab-button ${activeTab === "entrada" ? "active entrada" : "entrada"}`} 
-          onClick={() => setActiveTab("entrada")}
+          className={`tab-button ${activeTab === "SubcarpetasPDF" ? "active SubcarpetasPDF" : "SubcarpetasPDF"}`} 
+          onClick={() => setActiveTab("SubcarpetasPDF")}
         >
           📂 Subcarpetas PDFs
         </button>
 
         <button 
-          className={`tab-button ${activeTab === "intermedio-excel" ? "active intermedio-excel" : "intermedio-excel"}`} 
-          onClick={() => setActiveTab("intermedio-excel")}
+          className={`tab-button ${activeTab === "OrganizadorEXCEL" ? "active OrganizadorEXCEL" : "OrganizadorEXCEL"}`} 
+          onClick={() => setActiveTab("OrganizadorEXCEL")}
         >
           📊 Organizar EXCEL
         </button>
 
         {/* Nuevo botón para Extraer Información de Aprendices */}
         <button 
-          className={`tab-button ${activeTab === "extraer-aprendices" ? "active extraer-aprendices" : "extraer-aprendices"}`} 
-          onClick={() => setActiveTab("extraer-aprendices")}
+          className={`tab-button ${activeTab === "ExtraerInfAprendiz" ? "active ExtraerInfAprendiz" : "ExtraerInfAprendiz"}`} 
+          onClick={() => setActiveTab("ExtraerInfAprendiz")}
         >
           👩‍🎓 Extraer Aprendices PDFs
         </button>
 
         <button 
-          className={`tab-button ${activeTab === "intermedio-pdf" ? "active intermedio-pdf" : "intermedio-pdf"}`} 
-          onClick={() => setActiveTab("intermedio-pdf")}
+          className={`tab-button ${activeTab === "UnirPDF" ? "active UnirPDF" : "UnirPDF"}`} 
+          onClick={() => setActiveTab("UnirPDF")}
         >
           📑 Unir PDFs
         </button>
 
         <button 
-          className={`tab-button ${activeTab === "salida" ? "active salida" : "salida"}`} 
-          onClick={() => setActiveTab("salida")}
+          className={`tab-button ${activeTab === "RenombrarPDFFinal" ? "active RenombrarPDFFinal" : "RenombrarPDFFinal"}`} 
+          onClick={() => setActiveTab("RenombrarPDFFinal")}
         >
           📤 Renombrar PDFs Final
         </button>
       </nav>
 
       <main className="main-content">
-        {activeTab === "entrada-extractornombre" && <RenombrarPDF />}
-        {activeTab === "entrada" && <SubcarpetasPDF />}
-        {activeTab === "intermedio-excel" && <OrganizadorEXCEL />}
-        {activeTab === "extraer-aprendices" && <ExtraerInfAprendiz />} {/* 👈 nuevo render */}
-        {activeTab === "intermedio-pdf" && <UnirPDF />}
-        {activeTab === "salida" && <RenombrarPDFFinal />}
+        {activeTab === "RenombrarPDF" && <RenombrarPDF />}
+        {activeTab === "SubcarpetasPDF" && <SubcarpetasPDF />}
+        {activeTab === "OrganizadorEXCEL" && <OrganizadorEXCEL />}
+        {activeTab === "ExtraerInfAprendiz" && <ExtraerInfAprendiz />}
+        {activeTab === "UnirPDF" && <UnirPDF />}
+        {activeTab === "RenombrarPDFFinal" && <RenombrarPDFFinal />}
       </main>
 
       <footer className="app-footer">
