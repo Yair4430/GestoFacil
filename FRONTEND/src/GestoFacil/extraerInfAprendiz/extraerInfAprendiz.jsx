@@ -74,7 +74,7 @@ export default function ExtraerInfAprendiz() {
       <div className="doc-container">
         <div className="doc-card" data-component="extraer-aprendiz">
           <h2 className="doc-card-title">
-            👩‍🎓 Extraer Información de Aprendices del juicio a Excel
+            👩‍🎓 Extraer Aprendices del juicio a Excel
           </h2>
 
           <form onSubmit={handleSubmit}>

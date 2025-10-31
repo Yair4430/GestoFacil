@@ -9,8 +9,9 @@
 
 /* === TARJETA === */
 [data-component="entrada-extractornombre"].doc-card {
-  width: 95%;
-  max-width: 900px;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: none;
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(12px);
   border-radius: 18px;
@@ -68,26 +69,34 @@
 
 /* === BOTÓN === */
 [data-component="entrada-extractornombre"] .doc-btn {
-  padding: 12px 20px;
+  padding: 12px 22px;
   border: none;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1rem;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+[data-component="entrada-extractornombre"] .doc-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
 [data-component="entrada-extractornombre"] .doc-btn-entrada-extractornombre {
   background: linear-gradient(45deg, #2563eb, #3b82f6);
 }
 
-[data-component="entrada-extractornombre"] .doc-btn-entrada-extractornombre:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(37, 99, 235, 0.25);
-  background-position: right center;
-}
 
 /* === LOADER === */
 [data-component="entrada-extractornombre"] .doc-loading {

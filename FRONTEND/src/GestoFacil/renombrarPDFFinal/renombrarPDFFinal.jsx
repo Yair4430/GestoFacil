@@ -74,7 +74,7 @@ const RenombrarPDFFinal = () => {
           <div className="doc-resultado">
             {resultado.success ? (
               <>
-                <h3 className="doc-success-message">✅ {resultado.mensaje}</h3>
+                <h3 className="doc-success-message">✅ Proceso completado</h3>
                 
                 <div className="doc-stats-container">
                   <div className="doc-stat-item">

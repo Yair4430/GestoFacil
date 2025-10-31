@@ -75,7 +75,7 @@ export default function RenombrarPDF () {
 
         {resultado && (
           <div className="doc-resultado">
-            <h3 className="doc-success-message">✅ Resultado del proceso</h3>
+            <h3 className="doc-success-message">✅ Proceso completado</h3>
 
             {resultado.error ? (
               <div className="doc-error-message">{resultado.error}</div>

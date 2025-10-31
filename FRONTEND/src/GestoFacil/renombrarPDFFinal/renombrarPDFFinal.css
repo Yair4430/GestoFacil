@@ -69,32 +69,32 @@
 
 /* === BOTÓN (pequeño, al lado del input) === */
 [data-component="salida"] .doc-btn {
-  padding: 10px 22px;
+  padding: 12px 22px;
   border: none;
   border-radius: 12px;
-  font-weight: 700; /* más grueso, como en la imagen */
+  font-weight: 700;
   font-size: 1rem;
-  color: #ffffff; /* blanco puro */
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
-  height: 45px;
+  height: 46px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: inherit;
   letter-spacing: 0.3px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); /* leve sombra para realce */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+[data-component="salida"] .doc-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
 [data-component="salida"] .doc-btn-salida {
-  background-image: linear-gradient(45deg, #06b6d4, #22d3ee);
-}
-
-[data-component="salida"] .doc-btn-salida:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(6, 182, 212, 0.25);
+  background: linear-gradient(45deg, #06b6d4, #22d3ee);
 }
 
 /* === LOADER === */

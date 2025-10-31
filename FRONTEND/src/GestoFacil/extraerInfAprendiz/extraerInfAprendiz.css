@@ -1,29 +1,32 @@
-/* === ESTILOS AISLADOS DEL COMPONENTE === */
 .extraer-aprendiz-wrapper {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  background: transparent;
+  padding: 0 0 25px 0; /* 🔹 quitamos el espacio superior */
+  margin-top: -25px; /* 🔹 lo sube ligeramente respecto a los botones */
 }
 
-/* === CONTENEDOR PRINCIPAL === */
 .extraer-aprendiz-wrapper .doc-container {
+  width: 95%;
+  max-width: 1150px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  width: 100%;
-  padding: 25px;
-  background: transparent;
 }
 
-/* === TARJETA === */
+
 .extraer-aprendiz-wrapper .doc-card {
   width: 95%;
-  max-width: 900px;
-  background: rgba(255, 255, 255, 0.75);
+  max-width: 900px; /* 🔹 antes 900px: más largo */
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
   border-radius: 18px;
   padding: 30px 40px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.4);
   transition: all 0.3s ease;
+  margin-top: 35px; /* 🔹 opcional: si aún queda muy pegado, ajusta este valor */
 }
 
 .extraer-aprendiz-wrapper .doc-card:hover {
@@ -33,7 +36,7 @@
 
 /* === TÍTULO === */
 .extraer-aprendiz-wrapper .doc-card-title {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   font-weight: 700;
   color: #5b21b6;
   margin-bottom: 25px;
@@ -74,25 +77,32 @@
 
 /* === BOTÓN === */
 .extraer-aprendiz-wrapper .doc-btn {
-  padding: 12px 20px;
+  padding: 12px 22px;
   border: none;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1rem;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.12);
+  white-space: nowrap;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.extraer-aprendiz-wrapper .doc-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
 .extraer-aprendiz-wrapper .doc-btn-extraer-aprendiz {
-  background-image: linear-gradient(45deg, #8b5cf6, #a78bfa);
-}
-
-.extraer-aprendiz-wrapper .doc-btn-extraer-aprendiz:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(139, 92, 246, 0.25);
-  background-position: right center;
+  background: linear-gradient(45deg, #8b5cf6, #a78bfa);
 }
 
 /* === LOADER === */
@@ -156,7 +166,7 @@
   border-radius: 14px;
   padding: 16px 12px;
   text-align: center;
-  box-shadow: inset 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
 }
 

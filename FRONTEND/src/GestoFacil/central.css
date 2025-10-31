@@ -2,16 +2,18 @@
 .central-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center; /* 🔹 centra verticalmente */
+  align-items: center;     /* 🔹 centra horizontalmente */
   background: linear-gradient(135deg, #f9fafb, #e3e8ef);
-  min-height: 100vh;
+  min-height: 100vh;       /* 🔹 ocupa toda la altura de la ventana */
   font-family: "Poppins", sans-serif;
   padding: 20px;
 }
 
+
 /* === ENCABEZADO PREMIUM === */
 .header-premium {
-  width: 95%;
+  width: 100%;
   max-width: 900px;
   margin-bottom: 25px;
   padding: 25px 35px;
@@ -105,7 +107,7 @@
   justify-content: center;
   gap: 14px;
   margin: 10px 0 25px 0;
-  width: 95%;
+  width: 100%;
   max-width: 900px;
 }
 
@@ -144,15 +146,24 @@
 
 /* === ÁREA DE CONTENIDO (sin cuadro visible) === */
 .content-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Contenedor interno para igualar con el header */
+.main-container {
   width: 95%;
   max-width: 900px;
-  border-radius: 18px;
-  padding: 30px;
-  min-height: 450px;
-  transition: all 0.3s ease;
-  background: transparent;
-  box-shadow: none;
-  border: none;
+}
+
+.content-container {
+  width: 95%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* === PIE DE PÁGINA === */

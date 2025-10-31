@@ -69,7 +69,7 @@
 
 /* === BOTÓN (pequeño, con gradiente rojo) === */
 [data-component="intermedio-pdf"] .doc-btn {
-  padding: 10px 22px;
+  padding: 12px 22px;
   border: none;
   border-radius: 12px;
   font-weight: 700;
@@ -78,24 +78,25 @@
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
-  height: 45px;
+  height: 46px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: inherit;
   letter-spacing: 0.3px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+[data-component="intermedio-pdf"] .doc-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
 [data-component="intermedio-pdf"] .doc-btn-intermedio-pdf {
-  background-image: linear-gradient(45deg, #ef4444, #f87171);
+  background: linear-gradient(45deg, #ef4444, #f87171);
 }
 
-[data-component="intermedio-pdf"] .doc-btn-intermedio-pdf:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(239, 68, 68, 0.25);
-}
 
 /* === LOADER === */
 [data-component="intermedio-pdf"] .doc-loading {

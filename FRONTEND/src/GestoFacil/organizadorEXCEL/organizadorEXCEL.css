@@ -1,16 +1,18 @@
 /* === ESTILOS AISLADOS DEL COMPONENTE === */
 [data-component="intermedio-excel"] {
   width: 100%;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* === CONTENEDOR PRINCIPAL === */
+/* === TARJETA === */
+
 [data-component="intermedio-excel"].doc-card {
   width: 95%;
   max-width: 900px;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(12px);
   border-radius: 18px;
-  padding: 30px 40px;
+  padding: 20px 50px; /* 🔹 antes: 30px 40px — aumentamos padding lateral */
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.4);
   transition: all 0.3s ease;
@@ -25,7 +27,7 @@
 [data-component="intermedio-excel"] .doc-card-title {
   font-size: 1.9rem;
   font-weight: 700;
-  color: #7c2d12;
+  color: #78350f;
   margin-bottom: 25px;
   border-left: 6px solid #f59e0b;
   padding-left: 14px;
@@ -41,18 +43,19 @@
 }
 
 [data-component="intermedio-excel"] .doc-form-group {
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
 [data-component="intermedio-excel"] .doc-form-input {
   width: 100%;
-  padding: 12px 3px;
+  padding: 12px 5px;
   border-radius: 12px;
   border: 1.5px solid #cbd5e1;
   font-size: 1rem;
   outline: none;
   transition: all 0.3s ease;
   background-color: #f9fafb;
+  font-family: inherit;
 }
 
 [data-component="intermedio-excel"] .doc-form-input:focus {
@@ -62,25 +65,32 @@
 
 /* === BOTÓN === */
 [data-component="intermedio-excel"] .doc-btn {
-  padding: 12px 20px;
+  padding: 12px 22px;
   border: none;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1rem;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+[data-component="intermedio-excel"] .doc-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
 [data-component="intermedio-excel"] .doc-btn-intermedio-excel {
   background: linear-gradient(45deg, #f59e0b, #fbbf24);
-}
-
-[data-component="intermedio-excel"] .doc-btn-intermedio-excel:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(245, 158, 11, 0.3);
-  background-position: right center;
 }
 
 /* === LOADER === */
@@ -144,7 +154,7 @@
   border-radius: 14px;
   padding: 16px 12px;
   text-align: center;
-  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.06);
   transition: all 0.3s ease;
 }
 

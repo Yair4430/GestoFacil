@@ -87,7 +87,11 @@ function Central() {
         </button>
       </div>
 
-      <main className="content-area">{renderComponent()}</main>
+      <main className="content-area">
+        <div className="main-container">
+            {renderComponent()}
+        </div>
+      </main>
 
       <footer className="footer">
         <p>© 2025 <b>GestiFacil</b> — Desarrollado por <span>Yair Cárdenas</span></p>
