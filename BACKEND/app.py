@@ -76,16 +76,18 @@ def ejecutar_extraer_datos(ruta: str = Form(...)):
             check=True, capture_output=True
         )
 
-        # decodifica ignorando errores
         stdout_text = result.stdout.decode("utf-8", errors="ignore")
 
-        try:
-            return json.loads(stdout_text)
-        except json.JSONDecodeError:
-            return {
-                "message": stdout_text or "ExtraerInfAprendiz ejecutado correctamente",
-                "output": stdout_text
-            }
+        # Dividimos línea por línea y parseamos los JSON individuales
+        lineas = [l.strip() for l in stdout_text.splitlines() if l.strip()]
+        mensajes = []
+        for linea in lineas:
+            try:
+                mensajes.append(json.loads(linea))
+            except json.JSONDecodeError:
+                mensajes.append({"mensaje_texto": linea})
+        
+        return {"detalles": mensajes}
 
     except subprocess.CalledProcessError as e:
         return JSONResponse(status_code=500, content={"error": e.stderr.decode('utf-8', errors='ignore')})

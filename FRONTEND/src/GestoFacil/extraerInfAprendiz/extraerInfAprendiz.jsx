@@ -29,10 +29,41 @@ export default function ExtraerInfAprendiz() {
       }
 
       const data = await res.json();
-      setResultado(data);
+
+      // 🟢 Normalizamos la respuesta del backend
+      let archivos_exito = [];
+      let archivos_error = [];
+      let resumen = {};
+
+      if (data.detalles) {
+        data.detalles.forEach((item) => {
+          if (item.estado === "exito") {
+            archivos_exito.push(item);
+          } else if (item.estado === "error") {
+            archivos_error.push(item);
+          } else if (item.message) {
+            resumen.message = item.message;
+          }
+        });
+      } else {
+        // En caso de que llegue el formato antiguo
+        archivos_exito = data.archivos_procesados || [];
+        archivos_error = data.errores || [];
+        resumen = data;
+      }
+
+      setResultado({
+        message: resumen.message || data.message,
+        total_pdfs_encontrados:
+          data.total_pdfs_encontrados || archivos_exito.length + archivos_error.length,
+        procesados_exitosos: archivos_exito.length,
+        procesados_con_error: archivos_error.length,
+        archivos_procesados: archivos_exito,
+        errores: archivos_error,
+      });
     } catch (err) {
-      setError("Hubo un problema al procesar la solicitud.");
       console.error(err);
+      setError("Hubo un problema al procesar la solicitud.");
     } finally {
       setLoading(false);
     }
@@ -108,11 +139,14 @@ export default function ExtraerInfAprendiz() {
                     {resultado.archivos_procesados.map((archivo, index) => (
                       <li key={index} className="doc-file-item">
                         <div>
-                          <strong>{archivo.pdf}</strong> →{" "}
-                          <em>{archivo.excel_generado}</em>
+                          ✅ <strong>{archivo.pdf}</strong>{" "}
+                          ({archivo.registros_procesados || 0} registros)
                         </div>
-                        <div>Subcarpeta: {archivo.subcarpeta}</div>
-                        <div>Registros procesados: {archivo.registros_procesados}</div>
+                        {archivo.excel_generado && (
+                          <div>
+                            <em>Excel generado:</em> {archivo.excel_generado}
+                          </div>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -125,9 +159,10 @@ export default function ExtraerInfAprendiz() {
                   <ul className="doc-file-list">
                     {resultado.errores.map((err, idx) => (
                       <li key={idx} className="doc-file-item doc-error-item">
-                        <div><strong>{err.pdf}</strong></div>
-                        <div>Subcarpeta: {err.subcarpeta}</div>
-                        <div>Error: {err.error}</div>
+                        <div>
+                          ❌ <strong>{err.pdf}</strong>
+                        </div>
+                        {err.error && <div>Error: {err.error}</div>}
                       </li>
                     ))}
                   </ul>

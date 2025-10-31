@@ -102,30 +102,36 @@ def procesar_carpeta_principal_api(ruta_carpeta):
         if not pdfs_encontrados:
             resultado["message"] = "No se encontraron archivos PDF en las subcarpetas."
             return resultado
-        
+
         for pdf_info in pdfs_encontrados:
+            nombre_pdf = pdf_info['nombre_archivo']
             try:
                 tipos, documentos, nombres = extraer_datos_del_pdf(pdf_info['ruta'])
                 
                 archivo_salida = pdf_info['subcarpeta'] / "plantilla.xlsx"
-                
                 llenar_plantilla_con_datos(tipos, documentos, nombres, archivo_salida)
-                
+
+                resultado_individual = {
+                    "pdf": nombre_pdf,
+                    "estado": "exito",
+                    "registros_procesados": len(documentos),
+                    "excel_generado": str(archivo_salida)
+                }
+                print(json.dumps(resultado_individual, ensure_ascii=False), flush=True)
+
                 resultado["procesados_exitosos"] += 1
-                resultado["archivos_procesados"].append({
-                    "pdf": pdf_info['nombre_archivo'],
-                    "subcarpeta": str(pdf_info['subcarpeta']),
-                    "excel_generado": str(archivo_salida),
-                    "registros_procesados": len(documentos)
-                })
+                resultado["archivos_procesados"].append(resultado_individual)
                 
             except Exception as e:
-                resultado["procesados_con_error"] += 1
-                resultado["errores"].append({
-                    "pdf": pdf_info['nombre_archivo'],
-                    "subcarpeta": str(pdf_info['subcarpeta']),
+                resultado_individual = {
+                    "pdf": nombre_pdf,
+                    "estado": "error",
                     "error": str(e)
-                })
+                }
+                print(json.dumps(resultado_individual, ensure_ascii=False), flush=True)
+
+                resultado["procesados_con_error"] += 1
+                resultado["errores"].append(resultado_individual)
                 continue
         
         if resultado["procesados_exitosos"] > 0:
